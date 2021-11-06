@@ -183,8 +183,10 @@ namespace Lab4
 
         public void Clear()
         {
-            LeftOperand = "";
-            RightOperand = "";
+            CurrentFunction = null;
+            CurrentOperation = null;
+            LeftOperand = "0";
+            RightOperand = "0";
             Operator = "";
             LeftCalculated = 0;
             RightCalculated = 0;

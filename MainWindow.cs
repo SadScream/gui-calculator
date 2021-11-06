@@ -320,7 +320,9 @@ namespace Lab4
                     SetInputSettings(DefaultInputLength, IncreaseFontSize);
                     break;
                 case "ClearButton":
-                    //SetInputSettings(DefaultInputLength, IncreaseFontSize);
+                    OpHandler.Clear();
+                    CurrentExpressionLabel.Text = "0";
+                    CurrentNumberLabel.Text = "0";
                     break;
             }
         }
