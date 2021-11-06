@@ -293,7 +293,31 @@ namespace Lab4
                     IncreaseFontSize();
                     break;
                 case "CancelEntryButton":
-                    //SetInputSettings(DefaultInputLength, IncreaseFontSize);
+                    bool cf = (OpHandler.getCurrentFunction() == null),
+                         co = (OpHandler.getCurrentOperation() == null);
+
+                    CurrentNumberLabel.Text = "0";
+
+                    if (co)
+                    {
+                        OpHandler.setOperand(CurrentNumberLabel.Text);
+                        OpHandler.setCurrentFunction(null);
+                        return;
+                    }
+
+                    if (!cf)
+                    {
+                        OpHandler.setCurrentFunction(null);
+                        OpHandler.setOperand(CurrentNumberLabel.Text);
+                    }
+
+                    if (!co)
+                    {
+                        WaitForRightOperand = true;
+                    }
+
+                    CurrentExpressionLabel.Text = OpHandler.getExpressionStr(WaitForRightOperand);
+                    SetInputSettings(DefaultInputLength, IncreaseFontSize);
                     break;
                 case "ClearButton":
                     //SetInputSettings(DefaultInputLength, IncreaseFontSize);
