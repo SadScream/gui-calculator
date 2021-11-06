@@ -122,6 +122,10 @@ namespace Lab4
 
             if (WaitForRightOperand)
             {
+                // если истинно, то в данный момент CurrentNumberLaber содержит последнее
+                // вычесленное/введенное число, которое использовалось бы как второй операнд,
+                // если бы пользователь не начал ввод, а так как он начал, то зануляем текущее значение
+
                 CurrentNumberLabel.Text = "0";
                 WaitForRightOperand = false;
             }
@@ -138,8 +142,15 @@ namespace Lab4
             }
 
             if (CurrentNumberLabel.Text == "0")
+            {
                 CurrentNumberLabel.Text = "";
 
+                if (OpHandler.getCurrentOperation() != null)
+                {
+                    CurrentExpressionLabel.Text = OpHandler.getExpressionStr(true);
+                }
+            }
+                
             CurrentNumberLabel.Text = CurrentNumberLabel.Text + ((Button)sender).Text;
             OpHandler.setOperand(CurrentNumberLabel.Text);
             DecreaseFontSize();
@@ -251,32 +262,35 @@ namespace Lab4
                     }
                     break;
                 case "DeleteButton":
-                    //string op = OpHandler.getOperandStr();
+                    string operand = OpHandler.getOperandStr();
 
-                    //if (op == "0")
-                    //    return;
+                    if (operand == "0" || WaitForRightOperand || OpHandler.getCurrentFunction() != null)
+                        return;
 
-                    //if (op.Length == 1)
-                    //{
-                    //    SetCurrentNumberLabel("0");
-                    //    return;
-                    //}
-                    //else if (CurrentNumberLabel.Text.Length == 2 && CurrentNumberLabel.Text.First() == '-')
-                    //{
-                    //    SetCurrentNumberLabel("0");
-                    //    UpdateInputSettings(-1, delegate () { });
-                    //    return;
-                    //}
+                    if (operand.Length == 1)
+                    {
+                        OpHandler.setOperand("0");
+                        CurrentNumberLabel.Text = OpHandler.getOperandStr();
+                        return;
+                    }
+                    else if (CurrentNumberLabel.Text.Length == 2 && CurrentNumberLabel.Text.First() == '-')
+                    {
+                        OpHandler.setOperand("0");
+                        CurrentNumberLabel.Text = OpHandler.getOperandStr();
+                        UpdateInputSettings(-1, delegate () { });
+                        return;
+                    }
 
-                    //char LastCh = CurrentNumberLabel.Text.Last();
+                    char LastCh = CurrentNumberLabel.Text.Last();
 
-                    //if (LastCh == ',')
-                    //{
-                    //    UpdateInputSettings(-1, delegate () { });
-                    //}
+                    if (LastCh == ',')
+                    {
+                        UpdateInputSettings(-1, delegate () { });
+                    }
 
-                    //SetCurrentNumberLabel(CurrentNumberLabel.Text.Remove(CurrentNumberLabel.Text.Length - 1));
-                    //IncreaseFontSize();
+                    OpHandler.setOperand(CurrentNumberLabel.Text.Remove(CurrentNumberLabel.Text.Length - 1));
+                    CurrentNumberLabel.Text = OpHandler.getOperandStr();
+                    IncreaseFontSize();
                     break;
                 case "CancelEntryButton":
                     //SetInputSettings(DefaultInputLength, IncreaseFontSize);
