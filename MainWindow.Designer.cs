@@ -29,7 +29,7 @@ namespace Lab4
         /// </summary>
         private void InitializeComponent()
         {
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.mainLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.CurrentExpressionLabel = new System.Windows.Forms.Label();
             this.CurrentNumberLabel = new System.Windows.Forms.Label();
             this.PercentButton = new System.Windows.Forms.Button();
@@ -58,46 +58,55 @@ namespace Lab4
             this.SolveButton = new System.Windows.Forms.Button();
             this.AdditionalButton = new System.Windows.Forms.Button();
             this.HistoryButton = new System.Windows.Forms.Button();
-            this.flowLayoutPanel1.SuspendLayout();
+            this.additionalLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.CosButton = new System.Windows.Forms.Button();
+            this.SinButton = new System.Windows.Forms.Button();
+            this.TgButton = new System.Windows.Forms.Button();
+            this.CtgButton = new System.Windows.Forms.Button();
+            this.LnButton = new System.Windows.Forms.Button();
+            this.LgButton = new System.Windows.Forms.Button();
+            this.mainLayout.SuspendLayout();
+            this.additionalLayout.SuspendLayout();
             this.SuspendLayout();
             // 
-            // flowLayoutPanel1
+            // mainLayout
             // 
-            this.flowLayoutPanel1.Controls.Add(this.CurrentExpressionLabel);
-            this.flowLayoutPanel1.Controls.Add(this.CurrentNumberLabel);
-            this.flowLayoutPanel1.Controls.Add(this.PercentButton);
-            this.flowLayoutPanel1.Controls.Add(this.CancelEntryButton);
-            this.flowLayoutPanel1.Controls.Add(this.ClearButton);
-            this.flowLayoutPanel1.Controls.Add(this.DeleteButton);
-            this.flowLayoutPanel1.Controls.Add(this.ReverseButton);
-            this.flowLayoutPanel1.Controls.Add(this.SquareButton);
-            this.flowLayoutPanel1.Controls.Add(this.RadicalButton);
-            this.flowLayoutPanel1.Controls.Add(this.DivisionButton);
-            this.flowLayoutPanel1.Controls.Add(this.SevenButton);
-            this.flowLayoutPanel1.Controls.Add(this.EightButton);
-            this.flowLayoutPanel1.Controls.Add(this.NineButton);
-            this.flowLayoutPanel1.Controls.Add(this.MuliplyButton);
-            this.flowLayoutPanel1.Controls.Add(this.FourButton);
-            this.flowLayoutPanel1.Controls.Add(this.FiveButton);
-            this.flowLayoutPanel1.Controls.Add(this.SixButton);
-            this.flowLayoutPanel1.Controls.Add(this.MinusButton);
-            this.flowLayoutPanel1.Controls.Add(this.OneButton);
-            this.flowLayoutPanel1.Controls.Add(this.TwoButton);
-            this.flowLayoutPanel1.Controls.Add(this.ThreeButton);
-            this.flowLayoutPanel1.Controls.Add(this.PlusButton);
-            this.flowLayoutPanel1.Controls.Add(this.PosOrNegButton);
-            this.flowLayoutPanel1.Controls.Add(this.ZeroButton);
-            this.flowLayoutPanel1.Controls.Add(this.CommaButton);
-            this.flowLayoutPanel1.Controls.Add(this.SolveButton);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 35);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(259, 335);
-            this.flowLayoutPanel1.TabIndex = 0;
+            this.mainLayout.Controls.Add(this.CurrentExpressionLabel);
+            this.mainLayout.Controls.Add(this.CurrentNumberLabel);
+            this.mainLayout.Controls.Add(this.PercentButton);
+            this.mainLayout.Controls.Add(this.CancelEntryButton);
+            this.mainLayout.Controls.Add(this.ClearButton);
+            this.mainLayout.Controls.Add(this.DeleteButton);
+            this.mainLayout.Controls.Add(this.ReverseButton);
+            this.mainLayout.Controls.Add(this.SquareButton);
+            this.mainLayout.Controls.Add(this.RadicalButton);
+            this.mainLayout.Controls.Add(this.DivisionButton);
+            this.mainLayout.Controls.Add(this.SevenButton);
+            this.mainLayout.Controls.Add(this.EightButton);
+            this.mainLayout.Controls.Add(this.NineButton);
+            this.mainLayout.Controls.Add(this.MuliplyButton);
+            this.mainLayout.Controls.Add(this.FourButton);
+            this.mainLayout.Controls.Add(this.FiveButton);
+            this.mainLayout.Controls.Add(this.SixButton);
+            this.mainLayout.Controls.Add(this.MinusButton);
+            this.mainLayout.Controls.Add(this.OneButton);
+            this.mainLayout.Controls.Add(this.TwoButton);
+            this.mainLayout.Controls.Add(this.ThreeButton);
+            this.mainLayout.Controls.Add(this.PlusButton);
+            this.mainLayout.Controls.Add(this.PosOrNegButton);
+            this.mainLayout.Controls.Add(this.ZeroButton);
+            this.mainLayout.Controls.Add(this.CommaButton);
+            this.mainLayout.Controls.Add(this.SolveButton);
+            this.mainLayout.Location = new System.Drawing.Point(135, 41);
+            this.mainLayout.Name = "mainLayout";
+            this.mainLayout.Size = new System.Drawing.Size(259, 335);
+            this.mainLayout.TabIndex = 0;
             // 
             // CurrentExpressionLabel
             // 
             this.CurrentExpressionLabel.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.CurrentExpressionLabel.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.CurrentExpressionLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.CurrentExpressionLabel.Location = new System.Drawing.Point(0, 0);
             this.CurrentExpressionLabel.Margin = new System.Windows.Forms.Padding(0);
             this.CurrentExpressionLabel.Name = "CurrentExpressionLabel";
@@ -166,6 +175,8 @@ namespace Lab4
             // DeleteButton
             // 
             this.DeleteButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(228)))), ((int)(((byte)(228)))));
+            this.DeleteButton.BackgroundImage = global::Lab4.Properties.Resources.delete_256x185;
+            this.DeleteButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.DeleteButton.FlatAppearance.BorderSize = 0;
             this.DeleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.DeleteButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -174,7 +185,6 @@ namespace Lab4
             this.DeleteButton.Name = "DeleteButton";
             this.DeleteButton.Size = new System.Drawing.Size(60, 40);
             this.DeleteButton.TabIndex = 3;
-            this.DeleteButton.Text = "DEL";
             this.DeleteButton.UseVisualStyleBackColor = false;
             this.DeleteButton.Click += new System.EventHandler(this.EditingButtonClicked);
             // 
@@ -480,42 +490,149 @@ namespace Lab4
             // 
             // AdditionalButton
             // 
-            this.AdditionalButton.Location = new System.Drawing.Point(12, 6);
+            this.AdditionalButton.BackgroundImage = global::Lab4.Properties.Resources.menu_hambuger_256x194;
+            this.AdditionalButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.AdditionalButton.FlatAppearance.BorderSize = 0;
+            this.AdditionalButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.AdditionalButton.Location = new System.Drawing.Point(135, 12);
             this.AdditionalButton.Name = "AdditionalButton";
-            this.AdditionalButton.Size = new System.Drawing.Size(108, 23);
+            this.AdditionalButton.Size = new System.Drawing.Size(32, 23);
             this.AdditionalButton.TabIndex = 1;
-            this.AdditionalButton.Text = "Дополнительно";
             this.AdditionalButton.UseVisualStyleBackColor = true;
+            this.AdditionalButton.Click += new System.EventHandler(this.AdditionalButtonClicked);
             // 
             // HistoryButton
             // 
-            this.HistoryButton.Location = new System.Drawing.Point(185, 6);
+            this.HistoryButton.BackgroundImage = global::Lab4.Properties.Resources.clock_time_256x256;
+            this.HistoryButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.HistoryButton.FlatAppearance.BorderSize = 0;
+            this.HistoryButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.HistoryButton.Location = new System.Drawing.Point(357, 12);
             this.HistoryButton.Name = "HistoryButton";
-            this.HistoryButton.Size = new System.Drawing.Size(75, 23);
+            this.HistoryButton.Size = new System.Drawing.Size(32, 23);
             this.HistoryButton.TabIndex = 2;
-            this.HistoryButton.Text = "История";
             this.HistoryButton.UseVisualStyleBackColor = true;
+            this.HistoryButton.Click += new System.EventHandler(this.HistoryButtonClicked);
+            // 
+            // additionalLayout
+            // 
+            this.additionalLayout.Controls.Add(this.CosButton);
+            this.additionalLayout.Controls.Add(this.SinButton);
+            this.additionalLayout.Controls.Add(this.TgButton);
+            this.additionalLayout.Controls.Add(this.CtgButton);
+            this.additionalLayout.Controls.Add(this.LnButton);
+            this.additionalLayout.Controls.Add(this.LgButton);
+            this.additionalLayout.Location = new System.Drawing.Point(12, 124);
+            this.additionalLayout.Name = "additionalLayout";
+            this.additionalLayout.Size = new System.Drawing.Size(125, 252);
+            this.additionalLayout.TabIndex = 3;
+            // 
+            // CosButton
+            // 
+            this.CosButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(228)))), ((int)(((byte)(228)))));
+            this.CosButton.FlatAppearance.BorderSize = 0;
+            this.CosButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CosButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.CosButton.Location = new System.Drawing.Point(0, 0);
+            this.CosButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
+            this.CosButton.Name = "CosButton";
+            this.CosButton.Size = new System.Drawing.Size(60, 40);
+            this.CosButton.TabIndex = 1;
+            this.CosButton.Text = "cos";
+            this.CosButton.UseVisualStyleBackColor = false;
+            // 
+            // SinButton
+            // 
+            this.SinButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(228)))), ((int)(((byte)(228)))));
+            this.SinButton.FlatAppearance.BorderSize = 0;
+            this.SinButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SinButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.SinButton.Location = new System.Drawing.Point(62, 0);
+            this.SinButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
+            this.SinButton.Name = "SinButton";
+            this.SinButton.Size = new System.Drawing.Size(60, 40);
+            this.SinButton.TabIndex = 2;
+            this.SinButton.Text = "sin";
+            this.SinButton.UseVisualStyleBackColor = false;
+            // 
+            // TgButton
+            // 
+            this.TgButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(228)))), ((int)(((byte)(228)))));
+            this.TgButton.FlatAppearance.BorderSize = 0;
+            this.TgButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.TgButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.TgButton.Location = new System.Drawing.Point(0, 42);
+            this.TgButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
+            this.TgButton.Name = "TgButton";
+            this.TgButton.Size = new System.Drawing.Size(60, 40);
+            this.TgButton.TabIndex = 3;
+            this.TgButton.Text = "tg";
+            this.TgButton.UseVisualStyleBackColor = false;
+            // 
+            // CtgButton
+            // 
+            this.CtgButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(228)))), ((int)(((byte)(228)))));
+            this.CtgButton.FlatAppearance.BorderSize = 0;
+            this.CtgButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CtgButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.CtgButton.Location = new System.Drawing.Point(62, 42);
+            this.CtgButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
+            this.CtgButton.Name = "CtgButton";
+            this.CtgButton.Size = new System.Drawing.Size(60, 40);
+            this.CtgButton.TabIndex = 4;
+            this.CtgButton.Text = "ctg";
+            this.CtgButton.UseVisualStyleBackColor = false;
+            // 
+            // LnButton
+            // 
+            this.LnButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(228)))), ((int)(((byte)(228)))));
+            this.LnButton.FlatAppearance.BorderSize = 0;
+            this.LnButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.LnButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.LnButton.Location = new System.Drawing.Point(0, 84);
+            this.LnButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
+            this.LnButton.Name = "LnButton";
+            this.LnButton.Size = new System.Drawing.Size(60, 40);
+            this.LnButton.TabIndex = 5;
+            this.LnButton.Text = "ln";
+            this.LnButton.UseVisualStyleBackColor = false;
+            // 
+            // LgButton
+            // 
+            this.LgButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(228)))), ((int)(((byte)(228)))));
+            this.LgButton.FlatAppearance.BorderSize = 0;
+            this.LgButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.LgButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.LgButton.Location = new System.Drawing.Point(62, 84);
+            this.LgButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
+            this.LgButton.Name = "LgButton";
+            this.LgButton.Size = new System.Drawing.Size(60, 40);
+            this.LgButton.TabIndex = 6;
+            this.LgButton.Text = "lg";
+            this.LgButton.UseVisualStyleBackColor = false;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.ClientSize = new System.Drawing.Size(271, 381);
+            this.ClientSize = new System.Drawing.Size(394, 388);
+            this.Controls.Add(this.additionalLayout);
             this.Controls.Add(this.HistoryButton);
             this.Controls.Add(this.AdditionalButton);
-            this.Controls.Add(this.flowLayoutPanel1);
+            this.Controls.Add(this.mainLayout);
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Калькулятор";
-            this.flowLayoutPanel1.ResumeLayout(false);
+            this.mainLayout.ResumeLayout(false);
+            this.additionalLayout.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.FlowLayoutPanel mainLayout;
         private System.Windows.Forms.Label CurrentNumberLabel;
         private System.Windows.Forms.Label CurrentExpressionLabel;
         private System.Windows.Forms.Button ZeroButton;
@@ -544,6 +661,13 @@ namespace Lab4
         private System.Windows.Forms.Button SolveButton;
         private System.Windows.Forms.Button AdditionalButton;
         private System.Windows.Forms.Button HistoryButton;
+        private System.Windows.Forms.FlowLayoutPanel additionalLayout;
+        private System.Windows.Forms.Button CosButton;
+        private System.Windows.Forms.Button SinButton;
+        private System.Windows.Forms.Button TgButton;
+        private System.Windows.Forms.Button CtgButton;
+        private System.Windows.Forms.Button LnButton;
+        private System.Windows.Forms.Button LgButton;
     }
 }
 

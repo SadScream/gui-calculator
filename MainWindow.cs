@@ -18,10 +18,12 @@ namespace Lab4
         private Font middleFont = new("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
         private Font smallFont = new("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 
+        private HistoryWindow historyWindow;
+
         public MainWindow()
         {
             InitializeComponent();
-
+            AdditionalDisplay(true);
             OpHandler = new Resolver();
             MaxInputLength = DefaultInputLength;
         }
@@ -202,7 +204,8 @@ namespace Lab4
 
             string operation = ((Button)sender).Name;
             string currentStrValue = CurrentNumberLabel.Text;
-            double inputValue = OpHandler.getOperandDec();
+            double inputValue = OpHandler.getOperandDec(),
+                    r;
 
             switch (operation)
             {
@@ -213,6 +216,18 @@ namespace Lab4
                 case "RadicalButton":
                     OpHandler.setCurrentFunction(OpHandler.Sqrt);
                     OpHandler.setOperand(inputValue.ToString(), "sqrt({0})");
+                    break;
+                case "ReverseButton":
+                    r = OpHandler.Rev(inputValue);
+                    OpHandler.setOperand(r.ToString());
+                    //OpHandler.setCurrentFunction(OpHandler.Rev);
+                    //OpHandler.setOperand(inputValue.ToString(), "1/{0}");
+                    break;
+                case "PercentButton":
+                    r = OpHandler.Perc(inputValue);
+                    OpHandler.setOperand(r.ToString());
+                    //OpHandler.setCurrentFunction(OpHandler.Perc);
+                    //OpHandler.setOperand(inputValue.ToString(), "% {0}");
                     break;
             }
 
@@ -324,6 +339,37 @@ namespace Lab4
                     CurrentExpressionLabel.Text = "0";
                     CurrentNumberLabel.Text = "0";
                     break;
+            }
+        }
+
+        private void HistoryButtonClicked(object sender, EventArgs e)
+        {
+            historyWindow = new HistoryWindow(OpHandler);
+            historyWindow.Show();
+        }
+
+        private void AdditionalButtonClicked(object sender, EventArgs e)
+        {
+            AdditionalDisplay(additionalLayout.Visible);
+        }
+
+        private void AdditionalDisplay(bool hide)
+        {
+            if (hide)
+            {
+                AdditionalButton.Location = new System.Drawing.Point(12, 12);
+                HistoryButton.Location = new System.Drawing.Point(225, 12);
+                mainLayout.Location = new System.Drawing.Point(12, 41);
+                ClientSize = ClientSize = new System.Drawing.Size(271, 388);
+                additionalLayout.Hide();
+            }
+            else
+            {
+                AdditionalButton.Location = new System.Drawing.Point(135, 12);
+                HistoryButton.Location = new System.Drawing.Point(357, 12);
+                mainLayout.Location = new System.Drawing.Point(135, 41);
+                ClientSize = new System.Drawing.Size(394, 388);
+                additionalLayout.Show();
             }
         }
     }

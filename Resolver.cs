@@ -9,7 +9,8 @@ namespace Lab4
         public List<String> history = new List<String>();
 
         private Func<double, double> CurrentFunction = null;
-        private Func<double> CurrentOperation = null; 
+        private Func<double> CurrentOperation = null;
+        public Action EventListener = () => { };
 
         private string LeftOperand = "0", RightOperand = "0", Operator = "";
         private double LeftCalculated = 0, RightCalculated = 0, Result;
@@ -99,68 +100,66 @@ namespace Lab4
         public double Sum()
         {
             Result = LeftCalculated + RightCalculated;
-            history.Add(String.Format("{0:F6} {1} {2:F6} = {3:F}", LeftOperand, Operator, RightOperand, Result));
+            history.Add(String.Format("{0:F6} {1} {2:F} = {3}", LeftOperand, Operator, RightOperand, Result));
+            EventListener();
             return Result;
         }
 
         public double Dif()
         {
             Result = LeftCalculated - RightCalculated;
-            history.Add(String.Format("{0:F6} {1} {2:F6} = {3:F}", LeftOperand, Operator, RightOperand, Result));
+            history.Add(String.Format("{0:F} {1} {2:F} = {3}", LeftOperand, Operator, RightOperand, Result));
+            EventListener();
             return Result;
         }
 
         public double Div()
         {
             Result = LeftCalculated / RightCalculated;
-            history.Add(String.Format("{0:F6} {1} {2:F6} = {3:F}", LeftOperand, Operator, RightOperand, Result));
+            history.Add(String.Format("{0:F} {1} {2:F} = {3}", LeftOperand, Operator, RightOperand, Result));
+            EventListener();
             return Result;
         }
 
         public double Mult()
         {
             Result = LeftCalculated * RightCalculated;
-            history.Add(String.Format("{0:F6} {1} {2:F6} = {3:F}", LeftOperand, Operator, RightOperand, Result));
+            history.Add(String.Format("{0:F} {1} {2:F} = {3}", LeftOperand, Operator, RightOperand, Result));
+            EventListener();
             return Result;
         }
 
         public double Sqrt(double arg)
         {
             double r = Math.Sqrt(arg);
-            history.Add(String.Format("sqrt({0}) = {1:F}", arg, r));
-
+            history.Add(String.Format("sqrt({0}) = {1}", arg, r));
+            EventListener();
             return r;
         }
 
         public double Sqr(double arg)
         {
             double r = arg * arg;
-            history.Add(String.Format("sqr({0}) = {1:F}", arg, r));
-
+            history.Add(String.Format("sqr({0}) = {1}", arg, r));
+            EventListener();
             return r;
         }
 
-        //public string GetExpressionStr()
-        //{
-        //    string r = "";
+        public double Rev(double arg)
+        {
+            double r = 1 / arg;
+            history.Add(String.Format("1/{0} = {1}", arg, r));
+            EventListener();
+            return r;
+        }
 
-        //    if (LeftOperand != "0")
-        //    {
-        //        r += LeftOperand;
-
-        //        if (Operator != "0")
-        //        {
-        //            r += " " + Operator;
-
-        //            if (RightOperand != "0")
-        //            {
-        //                r += " " + RightOperand;
-        //            }
-        //        }
-        //    }
-
-        //    return r;
-        //}
+        public double Perc(double arg)
+        {
+            double r = LeftCalculated / 100.0 * arg;
+            history.Add(String.Format("% {0} = {1}", arg, r));
+            EventListener();
+            return r;
+        }
 
         public string getExpressionStr(bool WaitingForRight = false)
         {
