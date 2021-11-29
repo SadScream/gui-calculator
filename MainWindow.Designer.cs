@@ -97,20 +97,24 @@ namespace Lab4
             this.mainLayout.Controls.Add(this.ZeroButton);
             this.mainLayout.Controls.Add(this.CommaButton);
             this.mainLayout.Controls.Add(this.SolveButton);
-            this.mainLayout.Location = new System.Drawing.Point(135, 41);
+            this.mainLayout.Location = new System.Drawing.Point(75, 41);
             this.mainLayout.Name = "mainLayout";
             this.mainLayout.Size = new System.Drawing.Size(259, 335);
             this.mainLayout.TabIndex = 0;
             // 
             // CurrentExpressionLabel
             // 
+            this.CurrentExpressionLabel.AutoEllipsis = true;
+            this.CurrentExpressionLabel.AutoSize = true;
             this.CurrentExpressionLabel.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.CurrentExpressionLabel.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.CurrentExpressionLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.CurrentExpressionLabel.Location = new System.Drawing.Point(0, 0);
             this.CurrentExpressionLabel.Margin = new System.Windows.Forms.Padding(0);
+            this.CurrentExpressionLabel.MaximumSize = new System.Drawing.Size(246, 38);
+            this.CurrentExpressionLabel.MinimumSize = new System.Drawing.Size(246, 38);
             this.CurrentExpressionLabel.Name = "CurrentExpressionLabel";
-            this.CurrentExpressionLabel.Size = new System.Drawing.Size(246, 23);
+            this.CurrentExpressionLabel.Size = new System.Drawing.Size(246, 38);
             this.CurrentExpressionLabel.TabIndex = 24;
             this.CurrentExpressionLabel.Text = "0";
             this.CurrentExpressionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -119,10 +123,10 @@ namespace Lab4
             // 
             this.CurrentNumberLabel.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.CurrentNumberLabel.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.CurrentNumberLabel.Location = new System.Drawing.Point(0, 23);
+            this.CurrentNumberLabel.Location = new System.Drawing.Point(0, 38);
             this.CurrentNumberLabel.Margin = new System.Windows.Forms.Padding(0);
             this.CurrentNumberLabel.Name = "CurrentNumberLabel";
-            this.CurrentNumberLabel.Size = new System.Drawing.Size(246, 60);
+            this.CurrentNumberLabel.Size = new System.Drawing.Size(246, 46);
             this.CurrentNumberLabel.TabIndex = 1;
             this.CurrentNumberLabel.Text = "0";
             this.CurrentNumberLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -133,7 +137,7 @@ namespace Lab4
             this.PercentButton.FlatAppearance.BorderSize = 0;
             this.PercentButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PercentButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.PercentButton.Location = new System.Drawing.Point(0, 83);
+            this.PercentButton.Location = new System.Drawing.Point(0, 84);
             this.PercentButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.PercentButton.Name = "PercentButton";
             this.PercentButton.Size = new System.Drawing.Size(60, 40);
@@ -148,7 +152,7 @@ namespace Lab4
             this.CancelEntryButton.FlatAppearance.BorderSize = 0;
             this.CancelEntryButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CancelEntryButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.CancelEntryButton.Location = new System.Drawing.Point(62, 83);
+            this.CancelEntryButton.Location = new System.Drawing.Point(62, 84);
             this.CancelEntryButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.CancelEntryButton.Name = "CancelEntryButton";
             this.CancelEntryButton.Size = new System.Drawing.Size(60, 40);
@@ -163,7 +167,7 @@ namespace Lab4
             this.ClearButton.FlatAppearance.BorderSize = 0;
             this.ClearButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ClearButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ClearButton.Location = new System.Drawing.Point(124, 83);
+            this.ClearButton.Location = new System.Drawing.Point(124, 84);
             this.ClearButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.ClearButton.Name = "ClearButton";
             this.ClearButton.Size = new System.Drawing.Size(60, 40);
@@ -180,7 +184,7 @@ namespace Lab4
             this.DeleteButton.FlatAppearance.BorderSize = 0;
             this.DeleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.DeleteButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.DeleteButton.Location = new System.Drawing.Point(186, 83);
+            this.DeleteButton.Location = new System.Drawing.Point(186, 84);
             this.DeleteButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.DeleteButton.Name = "DeleteButton";
             this.DeleteButton.Size = new System.Drawing.Size(60, 40);
@@ -194,7 +198,7 @@ namespace Lab4
             this.ReverseButton.FlatAppearance.BorderSize = 0;
             this.ReverseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ReverseButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ReverseButton.Location = new System.Drawing.Point(0, 125);
+            this.ReverseButton.Location = new System.Drawing.Point(0, 126);
             this.ReverseButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.ReverseButton.Name = "ReverseButton";
             this.ReverseButton.Size = new System.Drawing.Size(60, 40);
@@ -209,7 +213,7 @@ namespace Lab4
             this.SquareButton.FlatAppearance.BorderSize = 0;
             this.SquareButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SquareButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.SquareButton.Location = new System.Drawing.Point(62, 125);
+            this.SquareButton.Location = new System.Drawing.Point(62, 126);
             this.SquareButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.SquareButton.Name = "SquareButton";
             this.SquareButton.Size = new System.Drawing.Size(60, 40);
@@ -224,7 +228,7 @@ namespace Lab4
             this.RadicalButton.FlatAppearance.BorderSize = 0;
             this.RadicalButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.RadicalButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.RadicalButton.Location = new System.Drawing.Point(124, 125);
+            this.RadicalButton.Location = new System.Drawing.Point(124, 126);
             this.RadicalButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.RadicalButton.Name = "RadicalButton";
             this.RadicalButton.Size = new System.Drawing.Size(60, 40);
@@ -239,7 +243,7 @@ namespace Lab4
             this.DivisionButton.FlatAppearance.BorderSize = 0;
             this.DivisionButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.DivisionButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.DivisionButton.Location = new System.Drawing.Point(186, 125);
+            this.DivisionButton.Location = new System.Drawing.Point(186, 126);
             this.DivisionButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.DivisionButton.Name = "DivisionButton";
             this.DivisionButton.Size = new System.Drawing.Size(60, 40);
@@ -254,7 +258,7 @@ namespace Lab4
             this.SevenButton.FlatAppearance.BorderSize = 0;
             this.SevenButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SevenButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.SevenButton.Location = new System.Drawing.Point(0, 167);
+            this.SevenButton.Location = new System.Drawing.Point(0, 168);
             this.SevenButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.SevenButton.Name = "SevenButton";
             this.SevenButton.Size = new System.Drawing.Size(60, 40);
@@ -269,7 +273,7 @@ namespace Lab4
             this.EightButton.FlatAppearance.BorderSize = 0;
             this.EightButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.EightButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.EightButton.Location = new System.Drawing.Point(62, 167);
+            this.EightButton.Location = new System.Drawing.Point(62, 168);
             this.EightButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.EightButton.Name = "EightButton";
             this.EightButton.Size = new System.Drawing.Size(60, 40);
@@ -284,7 +288,7 @@ namespace Lab4
             this.NineButton.FlatAppearance.BorderSize = 0;
             this.NineButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.NineButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.NineButton.Location = new System.Drawing.Point(124, 167);
+            this.NineButton.Location = new System.Drawing.Point(124, 168);
             this.NineButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.NineButton.Name = "NineButton";
             this.NineButton.Size = new System.Drawing.Size(60, 40);
@@ -299,7 +303,7 @@ namespace Lab4
             this.MuliplyButton.FlatAppearance.BorderSize = 0;
             this.MuliplyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.MuliplyButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.MuliplyButton.Location = new System.Drawing.Point(186, 167);
+            this.MuliplyButton.Location = new System.Drawing.Point(186, 168);
             this.MuliplyButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.MuliplyButton.Name = "MuliplyButton";
             this.MuliplyButton.Size = new System.Drawing.Size(60, 40);
@@ -314,7 +318,7 @@ namespace Lab4
             this.FourButton.FlatAppearance.BorderSize = 0;
             this.FourButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FourButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.FourButton.Location = new System.Drawing.Point(0, 209);
+            this.FourButton.Location = new System.Drawing.Point(0, 210);
             this.FourButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.FourButton.Name = "FourButton";
             this.FourButton.Size = new System.Drawing.Size(60, 40);
@@ -329,7 +333,7 @@ namespace Lab4
             this.FiveButton.FlatAppearance.BorderSize = 0;
             this.FiveButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FiveButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.FiveButton.Location = new System.Drawing.Point(62, 209);
+            this.FiveButton.Location = new System.Drawing.Point(62, 210);
             this.FiveButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.FiveButton.Name = "FiveButton";
             this.FiveButton.Size = new System.Drawing.Size(60, 40);
@@ -344,7 +348,7 @@ namespace Lab4
             this.SixButton.FlatAppearance.BorderSize = 0;
             this.SixButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SixButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.SixButton.Location = new System.Drawing.Point(124, 209);
+            this.SixButton.Location = new System.Drawing.Point(124, 210);
             this.SixButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.SixButton.Name = "SixButton";
             this.SixButton.Size = new System.Drawing.Size(60, 40);
@@ -359,7 +363,7 @@ namespace Lab4
             this.MinusButton.FlatAppearance.BorderSize = 0;
             this.MinusButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.MinusButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.MinusButton.Location = new System.Drawing.Point(186, 209);
+            this.MinusButton.Location = new System.Drawing.Point(186, 210);
             this.MinusButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.MinusButton.Name = "MinusButton";
             this.MinusButton.Size = new System.Drawing.Size(60, 40);
@@ -374,7 +378,7 @@ namespace Lab4
             this.OneButton.FlatAppearance.BorderSize = 0;
             this.OneButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.OneButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.OneButton.Location = new System.Drawing.Point(0, 251);
+            this.OneButton.Location = new System.Drawing.Point(0, 252);
             this.OneButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.OneButton.Name = "OneButton";
             this.OneButton.Size = new System.Drawing.Size(60, 40);
@@ -389,7 +393,7 @@ namespace Lab4
             this.TwoButton.FlatAppearance.BorderSize = 0;
             this.TwoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.TwoButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.TwoButton.Location = new System.Drawing.Point(62, 251);
+            this.TwoButton.Location = new System.Drawing.Point(62, 252);
             this.TwoButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.TwoButton.Name = "TwoButton";
             this.TwoButton.Size = new System.Drawing.Size(60, 40);
@@ -404,7 +408,7 @@ namespace Lab4
             this.ThreeButton.FlatAppearance.BorderSize = 0;
             this.ThreeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ThreeButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.ThreeButton.Location = new System.Drawing.Point(124, 251);
+            this.ThreeButton.Location = new System.Drawing.Point(124, 252);
             this.ThreeButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.ThreeButton.Name = "ThreeButton";
             this.ThreeButton.Size = new System.Drawing.Size(60, 40);
@@ -419,7 +423,7 @@ namespace Lab4
             this.PlusButton.FlatAppearance.BorderSize = 0;
             this.PlusButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PlusButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.PlusButton.Location = new System.Drawing.Point(186, 251);
+            this.PlusButton.Location = new System.Drawing.Point(186, 252);
             this.PlusButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.PlusButton.Name = "PlusButton";
             this.PlusButton.Size = new System.Drawing.Size(60, 40);
@@ -434,7 +438,7 @@ namespace Lab4
             this.PosOrNegButton.FlatAppearance.BorderSize = 0;
             this.PosOrNegButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PosOrNegButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.PosOrNegButton.Location = new System.Drawing.Point(0, 293);
+            this.PosOrNegButton.Location = new System.Drawing.Point(0, 294);
             this.PosOrNegButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.PosOrNegButton.Name = "PosOrNegButton";
             this.PosOrNegButton.Size = new System.Drawing.Size(60, 40);
@@ -449,7 +453,7 @@ namespace Lab4
             this.ZeroButton.FlatAppearance.BorderSize = 0;
             this.ZeroButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ZeroButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.ZeroButton.Location = new System.Drawing.Point(62, 293);
+            this.ZeroButton.Location = new System.Drawing.Point(62, 294);
             this.ZeroButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.ZeroButton.Name = "ZeroButton";
             this.ZeroButton.Size = new System.Drawing.Size(60, 40);
@@ -464,7 +468,7 @@ namespace Lab4
             this.CommaButton.FlatAppearance.BorderSize = 0;
             this.CommaButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CommaButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.CommaButton.Location = new System.Drawing.Point(124, 293);
+            this.CommaButton.Location = new System.Drawing.Point(124, 294);
             this.CommaButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.CommaButton.Name = "CommaButton";
             this.CommaButton.Size = new System.Drawing.Size(60, 40);
@@ -479,7 +483,7 @@ namespace Lab4
             this.SolveButton.FlatAppearance.BorderSize = 0;
             this.SolveButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SolveButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.SolveButton.Location = new System.Drawing.Point(186, 293);
+            this.SolveButton.Location = new System.Drawing.Point(186, 294);
             this.SolveButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.SolveButton.Name = "SolveButton";
             this.SolveButton.Size = new System.Drawing.Size(60, 40);
@@ -494,7 +498,7 @@ namespace Lab4
             this.AdditionalButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.AdditionalButton.FlatAppearance.BorderSize = 0;
             this.AdditionalButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.AdditionalButton.Location = new System.Drawing.Point(135, 12);
+            this.AdditionalButton.Location = new System.Drawing.Point(12, 12);
             this.AdditionalButton.Name = "AdditionalButton";
             this.AdditionalButton.Size = new System.Drawing.Size(32, 23);
             this.AdditionalButton.TabIndex = 1;
@@ -507,7 +511,7 @@ namespace Lab4
             this.HistoryButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.HistoryButton.FlatAppearance.BorderSize = 0;
             this.HistoryButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.HistoryButton.Location = new System.Drawing.Point(357, 12);
+            this.HistoryButton.Location = new System.Drawing.Point(288, 12);
             this.HistoryButton.Name = "HistoryButton";
             this.HistoryButton.Size = new System.Drawing.Size(32, 23);
             this.HistoryButton.TabIndex = 2;
@@ -522,9 +526,10 @@ namespace Lab4
             this.additionalLayout.Controls.Add(this.CtgButton);
             this.additionalLayout.Controls.Add(this.LnButton);
             this.additionalLayout.Controls.Add(this.LgButton);
-            this.additionalLayout.Location = new System.Drawing.Point(12, 124);
+            this.additionalLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.additionalLayout.Location = new System.Drawing.Point(14, 124);
             this.additionalLayout.Name = "additionalLayout";
-            this.additionalLayout.Size = new System.Drawing.Size(125, 252);
+            this.additionalLayout.Size = new System.Drawing.Size(63, 252);
             this.additionalLayout.TabIndex = 3;
             // 
             // CosButton
@@ -540,6 +545,7 @@ namespace Lab4
             this.CosButton.TabIndex = 1;
             this.CosButton.Text = "cos";
             this.CosButton.UseVisualStyleBackColor = false;
+            this.CosButton.Click += new System.EventHandler(this.SingleOperatorClicked);
             // 
             // SinButton
             // 
@@ -547,13 +553,14 @@ namespace Lab4
             this.SinButton.FlatAppearance.BorderSize = 0;
             this.SinButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SinButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.SinButton.Location = new System.Drawing.Point(62, 0);
+            this.SinButton.Location = new System.Drawing.Point(0, 42);
             this.SinButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.SinButton.Name = "SinButton";
             this.SinButton.Size = new System.Drawing.Size(60, 40);
             this.SinButton.TabIndex = 2;
             this.SinButton.Text = "sin";
             this.SinButton.UseVisualStyleBackColor = false;
+            this.SinButton.Click += new System.EventHandler(this.SingleOperatorClicked);
             // 
             // TgButton
             // 
@@ -561,13 +568,14 @@ namespace Lab4
             this.TgButton.FlatAppearance.BorderSize = 0;
             this.TgButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.TgButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.TgButton.Location = new System.Drawing.Point(0, 42);
+            this.TgButton.Location = new System.Drawing.Point(0, 84);
             this.TgButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.TgButton.Name = "TgButton";
             this.TgButton.Size = new System.Drawing.Size(60, 40);
             this.TgButton.TabIndex = 3;
             this.TgButton.Text = "tg";
             this.TgButton.UseVisualStyleBackColor = false;
+            this.TgButton.Click += new System.EventHandler(this.SingleOperatorClicked);
             // 
             // CtgButton
             // 
@@ -575,13 +583,14 @@ namespace Lab4
             this.CtgButton.FlatAppearance.BorderSize = 0;
             this.CtgButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CtgButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.CtgButton.Location = new System.Drawing.Point(62, 42);
+            this.CtgButton.Location = new System.Drawing.Point(0, 126);
             this.CtgButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.CtgButton.Name = "CtgButton";
             this.CtgButton.Size = new System.Drawing.Size(60, 40);
             this.CtgButton.TabIndex = 4;
             this.CtgButton.Text = "ctg";
             this.CtgButton.UseVisualStyleBackColor = false;
+            this.CtgButton.Click += new System.EventHandler(this.SingleOperatorClicked);
             // 
             // LnButton
             // 
@@ -589,13 +598,14 @@ namespace Lab4
             this.LnButton.FlatAppearance.BorderSize = 0;
             this.LnButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.LnButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.LnButton.Location = new System.Drawing.Point(0, 84);
+            this.LnButton.Location = new System.Drawing.Point(0, 168);
             this.LnButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.LnButton.Name = "LnButton";
             this.LnButton.Size = new System.Drawing.Size(60, 40);
             this.LnButton.TabIndex = 5;
             this.LnButton.Text = "ln";
             this.LnButton.UseVisualStyleBackColor = false;
+            this.LnButton.Click += new System.EventHandler(this.SingleOperatorClicked);
             // 
             // LgButton
             // 
@@ -603,20 +613,21 @@ namespace Lab4
             this.LgButton.FlatAppearance.BorderSize = 0;
             this.LgButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.LgButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.LgButton.Location = new System.Drawing.Point(62, 84);
+            this.LgButton.Location = new System.Drawing.Point(0, 210);
             this.LgButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.LgButton.Name = "LgButton";
             this.LgButton.Size = new System.Drawing.Size(60, 40);
             this.LgButton.TabIndex = 6;
             this.LgButton.Text = "lg";
             this.LgButton.UseVisualStyleBackColor = false;
+            this.LgButton.Click += new System.EventHandler(this.SingleOperatorClicked);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.ClientSize = new System.Drawing.Size(394, 388);
+            this.ClientSize = new System.Drawing.Size(334, 388);
             this.Controls.Add(this.additionalLayout);
             this.Controls.Add(this.HistoryButton);
             this.Controls.Add(this.AdditionalButton);
@@ -625,6 +636,7 @@ namespace Lab4
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Калькулятор";
             this.mainLayout.ResumeLayout(false);
+            this.mainLayout.PerformLayout();
             this.additionalLayout.ResumeLayout(false);
             this.ResumeLayout(false);
 

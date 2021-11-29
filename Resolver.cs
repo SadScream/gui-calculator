@@ -22,12 +22,12 @@ namespace Lab4
             ci.NumberFormat.NumberDecimalSeparator = ",";
         }
 
-        public void setOperator(string v)
+        public void SetOperator(string v)
         {
             Operator = v;
         }
 
-        public void setOperand(string v, string format = "{0}")
+        public void SetOperand(string v, string format = "{0}")
         {
             double calculated;
             bool left = (CurrentOperation == null);
@@ -37,10 +37,10 @@ namespace Lab4
 
             if (CurrentFunction == null)
             {
-                calculated = getFromStr(v);
+                calculated = GetFromStr(v);
             } else
             {
-                calculated = CurrentFunction(getFromStr(v));
+                calculated = CurrentFunction(GetFromStr(v));
                 v = String.Format(format, v);
             }
 
@@ -55,7 +55,7 @@ namespace Lab4
             }
         }
 
-        public string getOperandStr()
+        public string GetOperandStr()
         {
             if (CurrentOperation == null)
                 return LeftOperand;
@@ -63,7 +63,7 @@ namespace Lab4
                 return RightOperand;
         }
 
-        public double getOperandDec()
+        public double GetOperandDec()
         {
             if (CurrentOperation == null)
                 return LeftCalculated;
@@ -71,7 +71,7 @@ namespace Lab4
                 return RightCalculated;
         }
 
-        public void setCurrentOperation(Func<double> op)
+        public void SetCurrentOperation(Func<double> op)
         {
             /*
              * sum, dif, div, mult etc.
@@ -79,12 +79,12 @@ namespace Lab4
             CurrentOperation = op;
         }
 
-        public Func<double> getCurrentOperation()
+        public Func<double> GetCurrentOperation()
         {
             return CurrentOperation;
         }
 
-        public void setCurrentFunction(Func<double, double> f)
+        public void SetCurrentFunction(Func<double, double> f)
         {
             /*
              * sqrt, sqr, revers etc.
@@ -92,7 +92,7 @@ namespace Lab4
             CurrentFunction = f;
         }
 
-        public Func<double, double> getCurrentFunction()
+        public Func<double, double> GetCurrentFunction()
         {
             return CurrentFunction;
         }
@@ -100,68 +100,124 @@ namespace Lab4
         public double Sum()
         {
             Result = LeftCalculated + RightCalculated;
-            history.Add(String.Format("{0:F6} {1} {2:F} = {3}", LeftOperand, Operator, RightOperand, Result));
-            EventListener();
+            OperationDone();
             return Result;
         }
 
         public double Dif()
         {
             Result = LeftCalculated - RightCalculated;
-            history.Add(String.Format("{0:F} {1} {2:F} = {3}", LeftOperand, Operator, RightOperand, Result));
-            EventListener();
+            OperationDone();
             return Result;
         }
 
         public double Div()
         {
             Result = LeftCalculated / RightCalculated;
-            history.Add(String.Format("{0:F} {1} {2:F} = {3}", LeftOperand, Operator, RightOperand, Result));
-            EventListener();
+            OperationDone();
             return Result;
         }
 
         public double Mult()
         {
             Result = LeftCalculated * RightCalculated;
-            history.Add(String.Format("{0:F} {1} {2:F} = {3}", LeftOperand, Operator, RightOperand, Result));
-            EventListener();
+            OperationDone();
             return Result;
         }
 
         public double Sqrt(double arg)
         {
             double r = Math.Sqrt(arg);
-            history.Add(String.Format("sqrt({0}) = {1}", arg, r));
-            EventListener();
+            OperationDone("sqrt({0}) = {1}", arg, r);
             return r;
         }
 
         public double Sqr(double arg)
         {
             double r = arg * arg;
-            history.Add(String.Format("sqr({0}) = {1}", arg, r));
-            EventListener();
+            OperationDone("sqr({0}) = {1}", arg, r);
             return r;
         }
 
         public double Rev(double arg)
         {
             double r = 1 / arg;
-            history.Add(String.Format("1/{0} = {1}", arg, r));
-            EventListener();
+            OperationDone("1/{0} = {1}", arg, r);
             return r;
         }
 
         public double Perc(double arg)
         {
-            double r = LeftCalculated / 100.0 * arg;
-            history.Add(String.Format("% {0} = {1}", arg, r));
-            EventListener();
+            double l = LeftCalculated;
+
+            if (Operator == "")
+            {
+                l = 0;
+            }
+            double r = l / 100.0 * arg;
+            OperationDone("{0}% = {1}", arg, r);
             return r;
         }
 
-        public string getExpressionStr(bool WaitingForRight = false)
+        public double Cos(double arg)
+        {
+            double r = Math.Cos(arg);
+            OperationDone("cos({0}) = {1}", arg, r);
+            return r;
+        }
+
+        public double Sin(double arg)
+        {
+            double r = Math.Sin(arg);
+            OperationDone("sin({0}) = {1}", arg, r);
+            return r;
+        }
+
+        public double Tg(double arg)
+        {
+            double r = Math.Tan(arg);
+            OperationDone("tg({0}) = {1}", arg, r);
+            return r;
+        }
+
+        public double Ctg(double arg)
+        {
+            double r = 1.0 / Math.Tan(arg);
+            OperationDone("ctg({0}) = {1}", arg, r);
+            return r;
+        }
+
+        public double Ln(double arg)
+        {
+            double r = Math.Log(arg);
+            OperationDone("ln({0}) = {1}", arg, r);
+            return r;
+        }
+
+        public double Lg(double arg)
+        {
+            double r = Math.Log10(arg);
+            OperationDone("lg({0}) = {1}", arg, r);
+            return r;
+        }
+
+        private void OperationDone(string formattedResult, double arg, double result)
+        {
+            // для операции с одним операндом
+
+            history.Add(String.Format(formattedResult, arg, result));
+            EventListener();
+        }
+
+        private void OperationDone()
+        {
+            // для операций с двумя операндами
+
+            history.Add(String.Format("{0:F} {1} {2:F} = {3}", LeftOperand, Operator, RightOperand, Result));
+            EventListener();
+        }
+
+        public string GetExpressionStr(bool WaitingForRight = false)
         {
             string r = "";
 
@@ -192,7 +248,7 @@ namespace Lab4
             Result = 0;
         }
 
-        private double getFromStr(string str)
+        private double GetFromStr(string str)
         {
             return double.Parse(str, ci); ;
         }

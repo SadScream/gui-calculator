@@ -76,8 +76,8 @@ namespace Lab4
         private void SetInputSettings(SByte NewMaxLen, Action f)
         {
             /*
-             * аналог ChangeState, но в отличие от нее устанавливает новые значения,
-             * а не меняет старые
+             * NewMaxLen - какое новое значение примет MaxInputLength
+             * f - функция, которая будет вызвана в итоге. Подразумевается DecreaseFontSize или IncreaseFontSize
              */
 
             MaxInputLength = NewMaxLen;
@@ -86,20 +86,23 @@ namespace Lab4
 
         private void Solve(bool DoubleOp=true)
         {
-            CurrentExpressionLabel.Text = OpHandler.getExpressionStr();
+            CurrentExpressionLabel.Text = OpHandler.GetExpressionStr();
 
-            if (OpHandler.getCurrentOperation() != null && DoubleOp)
+            if (OpHandler.GetCurrentOperation() != null && DoubleOp)
             {
-                CurrentNumberLabel.Text = OpHandler.getCurrentOperation()().ToString();
-                OpHandler.setOperand("0"); // устанавливаем значение правого операнда на 0
-                OpHandler.setOperator(""); // убираем оператор
-                OpHandler.setCurrentOperation(null); // удаляем текущую операцию
+                Func<double> RunCurrentOperation = OpHandler.GetCurrentOperation();
 
-                // т.к. текущая операция удалена, то теперь левый операнд поменяется на значение аргумента
-                OpHandler.setOperand(CurrentNumberLabel.Text);
+                CurrentNumberLabel.Text = RunCurrentOperation().ToString(); // исполняем текущую операцию
+                OpHandler.SetCurrentFunction(null);
+                OpHandler.SetOperand("0"); // устанавливаем значение правого операнда на 0
+                OpHandler.SetOperator(""); // убираем оператор
+                OpHandler.SetCurrentOperation(null); // удаляем текущую операцию
+
+                // т.к. текущая операция удалена, то теперь левый операнд поменяется на CurrentNumberLabel.Text
+                OpHandler.SetOperand(CurrentNumberLabel.Text);
             } else
             {
-                double r = OpHandler.getOperandDec();
+                double r = OpHandler.GetOperandDec();
                 CurrentNumberLabel.Text = r.ToString();
             }
 
@@ -132,10 +135,10 @@ namespace Lab4
                 WaitForRightOperand = false;
             }
 
-            if (OpHandler.getCurrentFunction() != null)
+            if (OpHandler.GetCurrentFunction() != null)
             {
                 CurrentNumberLabel.Text = "0";
-                OpHandler.setCurrentFunction(null);
+                OpHandler.SetCurrentFunction(null);
             }
 
             if (CurrentNumberLabel.Text.Length >= MaxInputLength)
@@ -147,14 +150,14 @@ namespace Lab4
             {
                 CurrentNumberLabel.Text = "";
 
-                if (OpHandler.getCurrentOperation() != null)
+                if (OpHandler.GetCurrentOperation() != null)
                 {
-                    CurrentExpressionLabel.Text = OpHandler.getExpressionStr(true);
+                    CurrentExpressionLabel.Text = OpHandler.GetExpressionStr(true);
                 }
             }
                 
             CurrentNumberLabel.Text = CurrentNumberLabel.Text + ((Button)sender).Text;
-            OpHandler.setOperand(CurrentNumberLabel.Text);
+            OpHandler.SetOperand(CurrentNumberLabel.Text);
             DecreaseFontSize();
         }
 
@@ -163,38 +166,38 @@ namespace Lab4
             Button b = (Button)sender;
             string operation = b.Name;
 
-            if (OpHandler.getCurrentOperation() != null)
+            if (OpHandler.GetCurrentOperation() != null && !WaitForRightOperand)
             {
                 // если в данный момент уже введено какое-то выражение и вновь производится клик
                 // по оператору, то решаем это выражение и устанавливаем в качестве левого операнда результат
                 Solve();
             }
 
-            OpHandler.setOperator(b.Text);
+            OpHandler.SetOperator(b.Text);
 
             switch (operation)
             {
                 case "PlusButton":
-                    OpHandler.setCurrentOperation(OpHandler.Sum);
+                    OpHandler.SetCurrentOperation(OpHandler.Sum);
                     break;
                 case "MinusButton":
-                    OpHandler.setCurrentOperation(OpHandler.Dif);
+                    OpHandler.SetCurrentOperation(OpHandler.Dif);
                     break;
                 case "MuliplyButton":
-                    OpHandler.setCurrentOperation(OpHandler.Mult);
+                    OpHandler.SetCurrentOperation(OpHandler.Mult);
                     break;
                 case "DivisionButton":
-                    OpHandler.setCurrentOperation(OpHandler.Div);
+                    OpHandler.SetCurrentOperation(OpHandler.Div);
                     break;
             }
 
             WaitForRightOperand = true;
-            CurrentExpressionLabel.Text = OpHandler.getExpressionStr(WaitForRightOperand);
+            CurrentExpressionLabel.Text = OpHandler.GetExpressionStr(WaitForRightOperand);
 
             // устанавливаем в качестве правого оператора то же число, что и для левого оператора,
             // чтоб в случае, если пользователь сразу нажмет '=', посчитать результат для одного и того же числа
             // как в оригнинальном калькуляторе
-            OpHandler.setOperand(CurrentNumberLabel.Text);
+            OpHandler.SetOperand(CurrentNumberLabel.Text);
         }
 
         private void SingleOperatorClicked(object sender, EventArgs e)
@@ -204,35 +207,54 @@ namespace Lab4
 
             string operation = ((Button)sender).Name;
             string currentStrValue = CurrentNumberLabel.Text;
-            double inputValue = OpHandler.getOperandDec(),
-                    r;
+            double inputValue = OpHandler.GetOperandDec(), r;
 
             switch (operation)
             {
                 case "SquareButton":
-                    OpHandler.setCurrentFunction(OpHandler.Sqr);
-                    OpHandler.setOperand(inputValue.ToString(), "sqr({0})");
+                    OpHandler.SetCurrentFunction(OpHandler.Sqr);
+                    OpHandler.SetOperand(inputValue.ToString(), "sqr({0})");
                     break;
                 case "RadicalButton":
-                    OpHandler.setCurrentFunction(OpHandler.Sqrt);
-                    OpHandler.setOperand(inputValue.ToString(), "sqrt({0})");
+                    OpHandler.SetCurrentFunction(OpHandler.Sqrt);
+                    OpHandler.SetOperand(inputValue.ToString(), "sqrt({0})");
+                    break;
+                case "CosButton":
+                    OpHandler.SetCurrentFunction(OpHandler.Cos);
+                    OpHandler.SetOperand(inputValue.ToString(), "cos({0})");
+                    break;
+                case "SinButton":
+                    OpHandler.SetCurrentFunction(OpHandler.Sin);
+                    OpHandler.SetOperand(inputValue.ToString(), "sin({0})");
+                    break;
+                case "TgButton":
+                    OpHandler.SetCurrentFunction(OpHandler.Tg);
+                    OpHandler.SetOperand(inputValue.ToString(), "tg({0})");
+                    break;
+                case "CtgButton":
+                    OpHandler.SetCurrentFunction(OpHandler.Ctg);
+                    OpHandler.SetOperand(inputValue.ToString(), "ctg({0})");
+                    break;
+                case "LnButton":
+                    OpHandler.SetCurrentFunction(OpHandler.Ln);
+                    OpHandler.SetOperand(inputValue.ToString(), "ln({0})");
+                    break;
+                case "LgButton":
+                    OpHandler.SetCurrentFunction(OpHandler.Lg);
+                    OpHandler.SetOperand(inputValue.ToString(), "lg({0})");
                     break;
                 case "ReverseButton":
                     r = OpHandler.Rev(inputValue);
-                    OpHandler.setOperand(r.ToString());
-                    //OpHandler.setCurrentFunction(OpHandler.Rev);
-                    //OpHandler.setOperand(inputValue.ToString(), "1/{0}");
+                    OpHandler.SetOperand(r.ToString());
                     break;
                 case "PercentButton":
                     r = OpHandler.Perc(inputValue);
-                    OpHandler.setOperand(r.ToString());
-                    //OpHandler.setCurrentFunction(OpHandler.Perc);
-                    //OpHandler.setOperand(inputValue.ToString(), "% {0}");
+                    OpHandler.SetOperand(r.ToString());
                     break;
             }
 
-            CurrentNumberLabel.Text = OpHandler.getOperandDec().ToString();
-            CurrentExpressionLabel.Text = OpHandler.getExpressionStr();
+            CurrentNumberLabel.Text = OpHandler.GetOperandDec().ToString();
+            CurrentExpressionLabel.Text = OpHandler.GetExpressionStr();
             SetInputSettings(DefaultInputLength, IncreaseFontSize);
             Solve(false);
         }
@@ -244,7 +266,7 @@ namespace Lab4
              */
 
             string operation = ((Button)sender).Name;
-            string currentValue = OpHandler.getOperandStr();
+            string currentValue = OpHandler.GetOperandStr();
 
             switch (operation)
             {
@@ -257,13 +279,13 @@ namespace Lab4
                     if (CurrentNumberLabel.Text[0] != '-')
                     {
                         koeff = 1;
-                        OpHandler.setOperand("-" + currentValue);
-                        CurrentNumberLabel.Text = OpHandler.getOperandStr();
+                        OpHandler.SetOperand("-" + currentValue);
+                        CurrentNumberLabel.Text = OpHandler.GetOperandStr();
                     }
                     else
                     {
-                        OpHandler.setOperand(currentValue.Substring(1));
-                        CurrentNumberLabel.Text = OpHandler.getOperandStr();
+                        OpHandler.SetOperand(currentValue.Substring(1));
+                        CurrentNumberLabel.Text = OpHandler.GetOperandStr();
                     }
 
                     UpdateInputSettings(koeff, DecreaseFontSize);
@@ -271,27 +293,27 @@ namespace Lab4
                 case "CommaButton":
                     if (!CurrentNumberLabel.Text.Contains(','))
                     {
-                        OpHandler.setOperand(currentValue + ",");
-                        CurrentNumberLabel.Text = OpHandler.getOperandStr();
+                        OpHandler.SetOperand(currentValue + ",");
+                        CurrentNumberLabel.Text = OpHandler.GetOperandStr();
                         UpdateInputSettings(1, DecreaseFontSize);
                     }
                     break;
                 case "DeleteButton":
-                    string operand = OpHandler.getOperandStr();
+                    string operand = OpHandler.GetOperandStr();
 
-                    if (operand == "0" || WaitForRightOperand || OpHandler.getCurrentFunction() != null)
+                    if (operand == "0" || WaitForRightOperand || OpHandler.GetCurrentFunction() != null)
                         return;
 
                     if (operand.Length == 1)
                     {
-                        OpHandler.setOperand("0");
-                        CurrentNumberLabel.Text = OpHandler.getOperandStr();
+                        OpHandler.SetOperand("0");
+                        CurrentNumberLabel.Text = OpHandler.GetOperandStr();
                         return;
                     }
                     else if (CurrentNumberLabel.Text.Length == 2 && CurrentNumberLabel.Text.First() == '-')
                     {
-                        OpHandler.setOperand("0");
-                        CurrentNumberLabel.Text = OpHandler.getOperandStr();
+                        OpHandler.SetOperand("0");
+                        CurrentNumberLabel.Text = OpHandler.GetOperandStr();
                         UpdateInputSettings(-1, delegate () { });
                         return;
                     }
@@ -303,27 +325,27 @@ namespace Lab4
                         UpdateInputSettings(-1, delegate () { });
                     }
 
-                    OpHandler.setOperand(CurrentNumberLabel.Text.Remove(CurrentNumberLabel.Text.Length - 1));
-                    CurrentNumberLabel.Text = OpHandler.getOperandStr();
+                    OpHandler.SetOperand(CurrentNumberLabel.Text.Remove(CurrentNumberLabel.Text.Length - 1));
+                    CurrentNumberLabel.Text = OpHandler.GetOperandStr();
                     IncreaseFontSize();
                     break;
                 case "CancelEntryButton":
-                    bool cf = (OpHandler.getCurrentFunction() == null),
-                         co = (OpHandler.getCurrentOperation() == null);
+                    bool cf = (OpHandler.GetCurrentFunction() == null),
+                         co = (OpHandler.GetCurrentOperation() == null);
 
                     CurrentNumberLabel.Text = "0";
 
                     if (co)
                     {
-                        OpHandler.setOperand(CurrentNumberLabel.Text);
-                        OpHandler.setCurrentFunction(null);
+                        OpHandler.SetOperand(CurrentNumberLabel.Text);
+                        OpHandler.SetCurrentFunction(null);
                         return;
                     }
 
                     if (!cf)
                     {
-                        OpHandler.setCurrentFunction(null);
-                        OpHandler.setOperand(CurrentNumberLabel.Text);
+                        OpHandler.SetCurrentFunction(null);
+                        OpHandler.SetOperand(CurrentNumberLabel.Text);
                     }
 
                     if (!co)
@@ -331,7 +353,7 @@ namespace Lab4
                         WaitForRightOperand = true;
                     }
 
-                    CurrentExpressionLabel.Text = OpHandler.getExpressionStr(WaitForRightOperand);
+                    CurrentExpressionLabel.Text = OpHandler.GetExpressionStr(WaitForRightOperand);
                     SetInputSettings(DefaultInputLength, IncreaseFontSize);
                     break;
                 case "ClearButton":
@@ -344,6 +366,9 @@ namespace Lab4
 
         private void HistoryButtonClicked(object sender, EventArgs e)
         {
+            if (historyWindow != null && historyWindow.Visible)
+                return;
+
             historyWindow = new HistoryWindow(OpHandler);
             historyWindow.Show();
         }
@@ -357,18 +382,16 @@ namespace Lab4
         {
             if (hide)
             {
-                AdditionalButton.Location = new System.Drawing.Point(12, 12);
                 HistoryButton.Location = new System.Drawing.Point(225, 12);
                 mainLayout.Location = new System.Drawing.Point(12, 41);
-                ClientSize = ClientSize = new System.Drawing.Size(271, 388);
+                ClientSize = new System.Drawing.Size(271, 388);
                 additionalLayout.Hide();
             }
             else
             {
-                AdditionalButton.Location = new System.Drawing.Point(135, 12);
-                HistoryButton.Location = new System.Drawing.Point(357, 12);
-                mainLayout.Location = new System.Drawing.Point(135, 41);
-                ClientSize = new System.Drawing.Size(394, 388);
+                HistoryButton.Location = new System.Drawing.Point(288, 12);
+                mainLayout.Location = new System.Drawing.Point(75, 41);
+                ClientSize = new System.Drawing.Size(334, 388);
                 additionalLayout.Show();
             }
         }

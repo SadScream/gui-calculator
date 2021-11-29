@@ -38,6 +38,7 @@ namespace Lab4
             // ExpressionBox
             // 
             this.ExpressionBox.FormattingEnabled = true;
+            this.ExpressionBox.HorizontalScrollbar = true;
             this.ExpressionBox.ItemHeight = 15;
             this.ExpressionBox.Location = new System.Drawing.Point(12, 12);
             this.ExpressionBox.Name = "ExpressionBox";
