@@ -20,9 +20,9 @@ namespace Lab4
 
             this.OpHandler = OpHandler;
 
-            for (int i = 0; i < OpHandler.history.Count(); i++)
+            for (int i = 0; i < OpHandler.GetHistory().Count(); i++)
             {
-                ExpressionBox.Items.Add(OpHandler.history[i]);
+                ExpressionBox.Items.Add(OpHandler.GetHistory()[i]);
             }
 
             OpHandler.EventListener = updateList;
@@ -30,7 +30,7 @@ namespace Lab4
 
         private void updateList()
         {
-            ExpressionBox.Items.Add(OpHandler.history.Last());
+            ExpressionBox.Items.Add(OpHandler.GetHistory().Last());
         }
 
         private void uploadButton_Click(object sender, EventArgs e)

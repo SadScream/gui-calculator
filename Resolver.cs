@@ -6,251 +6,211 @@ namespace Lab4
 {
     class Resolver
     {
-        public List<String> history = new List<String>();
+        // класс для основной работы с операндами
 
-        private Func<double, double> CurrentFunction = null;
-        private Func<double> CurrentOperation = null;
+        private List<String> history = new();
+        private readonly Dictionary<Action, string> expressions = new();
+
+        private Action CurrentExpression = null;
+        private double Result;
+
         public Action EventListener = () => { };
 
-        private string LeftOperand = "0", RightOperand = "0", Operator = "";
-        private double LeftCalculated = 0, RightCalculated = 0, Result;
+        public OperandManager operand;
+        public FunctionManager function;
 
         private readonly CultureInfo ci = (CultureInfo)CultureInfo.CurrentCulture.Clone();
 
         public Resolver()
         {
             ci.NumberFormat.NumberDecimalSeparator = ",";
+            expressions.Add(Sum, "+");
+            expressions.Add(Dif, "-");
+            expressions.Add(Div, "/");
+            expressions.Add(Mult, "*");
+
+            operand = new OperandManager();
+            function = new FunctionManager(this);
         }
 
-        public void SetOperator(string v)
+        public List<String> GetHistory()
         {
-            Operator = v;
+            return history;
         }
 
-        public void SetOperand(string v, string format = "{0}")
+        public double GetResult()
         {
-            double calculated;
-            bool left = (CurrentOperation == null);
-
-            if (left && LeftOperand == "0" || !left && RightOperand == "0")
-                CurrentFunction = null;
-
-            if (CurrentFunction == null)
-            {
-                calculated = GetFromStr(v);
-            } else
-            {
-                calculated = CurrentFunction(GetFromStr(v));
-                v = String.Format(format, v);
-            }
-
-            if (left)
-            {
-                LeftOperand = v;
-                LeftCalculated = calculated;
-            } else
-            {
-                RightOperand = v;
-                RightCalculated = calculated;
-            }
+            return Result;
         }
 
-        public string GetOperandStr()
+        public void SetExpression(Action newExpression)
         {
-            if (CurrentOperation == null)
-                return LeftOperand;
-            else
-                return RightOperand;
+            CurrentExpression = newExpression;
         }
 
-        public double GetOperandDec()
+        public Action GetOperator()
         {
-            if (CurrentOperation == null)
-                return LeftCalculated;
-            else
-                return RightCalculated;
+            return CurrentExpression;
         }
 
-        public void SetCurrentOperation(Func<double> op)
+        public void PutNum(string textNum)
         {
             /*
-             * sum, dif, div, mult etc.
+             * добавление цифры к активному операнду
              */
-            CurrentOperation = op;
+
+            operand.Active().Add(textNum);
         }
 
-        public Func<double> GetCurrentOperation()
-        {
-            return CurrentOperation;
-        }
-
-        public void SetCurrentFunction(Func<double, double> f)
+        public void PutComma()
         {
             /*
-             * sqrt, sqr, revers etc.
+             * добавление запятой к активному операнду, если возможно
              */
-            CurrentFunction = f;
-        }
 
-        public Func<double, double> GetCurrentFunction()
-        {
-            return CurrentFunction;
-        }
-
-        public double Sum()
-        {
-            Result = LeftCalculated + RightCalculated;
-            OperationDone();
-            return Result;
-        }
-
-        public double Dif()
-        {
-            Result = LeftCalculated - RightCalculated;
-            OperationDone();
-            return Result;
-        }
-
-        public double Div()
-        {
-            Result = LeftCalculated / RightCalculated;
-            OperationDone();
-            return Result;
-        }
-
-        public double Mult()
-        {
-            Result = LeftCalculated * RightCalculated;
-            OperationDone();
-            return Result;
-        }
-
-        public double Sqrt(double arg)
-        {
-            double r = Math.Sqrt(arg);
-            OperationDone("sqrt({0}) = {1}", arg, r);
-            return r;
-        }
-
-        public double Sqr(double arg)
-        {
-            double r = arg * arg;
-            OperationDone("sqr({0}) = {1}", arg, r);
-            return r;
-        }
-
-        public double Rev(double arg)
-        {
-            double r = 1 / arg;
-            OperationDone("1/{0} = {1}", arg, r);
-            return r;
-        }
-
-        public double Perc(double arg)
-        {
-            double l = LeftCalculated;
-
-            if (Operator == "")
+            if (operand.Active().GetFunction() == null && !operand.Active().GetText().Contains(","))
             {
-                l = 0;
+                operand.Active().Add(",");
             }
-            double r = l / 100.0 * arg;
-            OperationDone("{0}% = {1}", arg, r);
-            return r;
         }
 
-        public double Cos(double arg)
+        public void PutNegative()
         {
-            double r = Math.Cos(arg);
-            OperationDone("cos({0}) = {1}", arg, r);
-            return r;
+            /*
+             * преобразование активного операнда в отрицательное число, либо,
+             * если это функция, обертывание ее в функцию negate
+             */
+
+            if (operand.Active().GetText() == "0")
+            {
+                return;
+            }
+            if (operand.Active().GetFunction() != null)
+            {
+                operand.Active().AddFunction(function, function.Negate);
+                return;
+            }
+            string CurrentNum = operand.Active().GetText();
+            operand.Active().SetByStr("-" + CurrentNum);
         }
 
-        public double Sin(double arg)
+        public void PutOperator(Action e)
         {
-            double r = Math.Sin(arg);
-            OperationDone("sin({0}) = {1}", arg, r);
-            return r;
+            /*
+             * вставка оператора в выражение
+             */
+
+            CurrentExpression = e;
+
+            if (operand.LeftIsActive())
+            {
+                operand.SetRightActive(true);
+            } else
+            {
+                operand.SetLeftActive(true);
+            }
         }
 
-        public double Tg(double arg)
+        public void PutFunction(Func<double, double> f)
         {
-            double r = Math.Tan(arg);
-            OperationDone("tg({0}) = {1}", arg, r);
-            return r;
+            /*
+             * Обертывание текущего активного операнда в функцию
+             * Для обертывания в negate есть отельная функция PutNegative
+             */
+
+            if (f == function.Negate)
+            {
+                PutNegative();
+                return;
+            }
+            operand.Active().AddFunction(function, f);
+            FunctionDone();
         }
 
-        public double Ctg(double arg)
+        public bool Solve()
         {
-            double r = 1.0 / Math.Tan(arg);
-            OperationDone("ctg({0}) = {1}", arg, r);
-            return r;
+            /*
+             * Вычисляет выражение, если оно введено полностью
+             */
+
+            if (CurrentExpression != null)
+            {
+                CurrentExpression();
+                ExpressionDone();
+                return true;
+            }
+            return false;
         }
 
-        public double Ln(double arg)
+        public void Sum()
         {
-            double r = Math.Log(arg);
-            OperationDone("ln({0}) = {1}", arg, r);
-            return r;
+            Result = operand.Left.GetNumber() + operand.Right.GetNumber();
         }
 
-        public double Lg(double arg)
+        public void Dif()
         {
-            double r = Math.Log10(arg);
-            OperationDone("lg({0}) = {1}", arg, r);
-            return r;
+            Result = operand.Left.GetNumber() - operand.Right.GetNumber();
         }
 
-        private void OperationDone(string formattedResult, double arg, double result)
+        public void Div()
         {
-            // для операции с одним операндом
+            Result = operand.Left.GetNumber() / operand.Right.GetNumber();
+        }
 
-            history.Add(String.Format(formattedResult, arg, result));
+        public void Mult()
+        {
+            Result = operand.Left.GetNumber() * operand.Right.GetNumber();
+        }
+
+        private void FunctionDone()
+        {
+            // журналирование для операций с одним операндом
+
+            history.Add(String.Format("{0} = {1}",
+                operand.Active().GetText(),
+                operand.Active().GetNumber()));
+
             EventListener();
         }
 
-        private void OperationDone()
+        private void ExpressionDone()
         {
-            // для операций с двумя операндами
+            // журналирование для операций с двумя операндами
 
-            history.Add(String.Format("{0:F} {1} {2:F} = {3}", LeftOperand, Operator, RightOperand, Result));
+            string left = operand.Left.GetText(), 
+                operatorSymbol = expressions.GetValueOrDefault(CurrentExpression),
+                right = operand.Right.GetText();
+
+            history.Add(String.Format("{0:F} {1} {2:F} = {3}", 
+                left,
+                operatorSymbol, 
+                right, 
+                Result));
+
             EventListener();
         }
 
-        public string GetExpressionStr(bool WaitingForRight = false)
+        public string GetExpressionStr()
         {
+            /*
+             * Переводит имеющиеся операнды и оператор в одну строку
+             */
+
             string r = "";
 
-            r += LeftOperand;
+            r += operand.Left.GetText();
 
-            if (Operator != "")
+            if (CurrentExpression != null)
             {
-                r += " " + Operator;
+                r += " " + expressions.GetValueOrDefault(CurrentExpression);
 
-                if (!WaitingForRight)
+                if (operand.RightIsActive() && !operand.Right.WaitForInput())
                 {
-                    r += " " + RightOperand;
+                    r += " " + operand.Right.GetText();
                 }
             }
 
             return r;
-        }
-
-        public void Clear()
-        {
-            CurrentFunction = null;
-            CurrentOperation = null;
-            LeftOperand = "0";
-            RightOperand = "0";
-            Operator = "";
-            LeftCalculated = 0;
-            RightCalculated = 0;
-            Result = 0;
-        }
-
-        private double GetFromStr(string str)
-        {
-            return double.Parse(str, ci); ;
         }
     }
 }
