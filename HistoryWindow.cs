@@ -12,9 +12,11 @@ namespace Lab4
 {
     partial class HistoryWindow : Form
     {
+        public MainWindow MainW;
         public Resolver OpHandler;
+        public Parser ExpParser;
 
-        public HistoryWindow(Resolver OpHandler)
+        public HistoryWindow(MainWindow main, Resolver OpHandler)
         {
             InitializeComponent();
 
@@ -25,7 +27,9 @@ namespace Lab4
                 ExpressionBox.Items.Add(OpHandler.GetHistory()[i]);
             }
 
+            MainW = main;
             OpHandler.EventListener = updateList;
+            ExpParser = new Parser(OpHandler);
         }
 
         private void updateList()
@@ -41,6 +45,20 @@ namespace Lab4
         private void downloadButton_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void ExpressionBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            MainW.Clear();
+            ListBox ExpressionBox = (ListBox)sender;
+            ExpParser.Parse(ExpressionBox.SelectedItem.ToString());
+            MainW.SetCurrentExpression(OpHandler.GetExpressionStr());
+
+            if (OpHandler.Solve())
+                MainW.SetCurrentNumber(OpHandler.GetResult().ToString());
+            else
+                MainW.SetCurrentNumber(OpHandler.operand.Active().GetNumber().ToString());
+            //listbox.SelectedItem;
         }
     }
 }

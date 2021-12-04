@@ -9,7 +9,7 @@ namespace Lab4
         // класс для основной работы с операндами
 
         private List<String> history = new();
-        private readonly Dictionary<Action, string> expressions = new();
+        public readonly Dictionary<Action, string> expressions = new();
 
         private Action CurrentExpression = null;
         private double Result;

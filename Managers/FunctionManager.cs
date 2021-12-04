@@ -17,8 +17,8 @@ namespace Lab4
             functions.Add(Negate, "negate({0})");
             functions.Add(Sqrt, "sqrt({0})");
             functions.Add(Sqr, "sqr({0})");
-            functions.Add(Rev, "1/{0}");
-            functions.Add(Perc, "{0}%");
+            functions.Add(Rev, "reverse({0})");
+            functions.Add(Perc, "proc({0})");
             functions.Add(Cos, "cos({0})");
             functions.Add(Sin, "sin({0})");
             functions.Add(Tg, "tg({0})");

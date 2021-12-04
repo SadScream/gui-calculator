@@ -44,6 +44,7 @@ namespace Lab4
             this.ExpressionBox.Name = "ExpressionBox";
             this.ExpressionBox.Size = new System.Drawing.Size(260, 259);
             this.ExpressionBox.TabIndex = 0;
+            this.ExpressionBox.SelectedIndexChanged += new System.EventHandler(this.ExpressionBox_SelectedIndexChanged);
             // 
             // uploadButton
             // 

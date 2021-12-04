@@ -27,6 +27,16 @@ namespace Lab4
             MaxInputLength = DefaultInputLength;
         }
 
+        public void SetCurrentExpression(string s)
+        {
+            CurrentExpressionLabel.Text = s;
+        }
+
+        public void SetCurrentNumber(string s)
+        {
+            CurrentNumberLabel.Text = s;
+        }
+
         private void DecreaseFontSize()
         {
             // уменьшаем размер шрифта в зависимости от длины строки
@@ -282,15 +292,20 @@ namespace Lab4
                     SetInputSettings(DefaultInputLength, IncreaseFontSize);
                     break;
                 case "ClearButton":
-                    OpHandler.operand.Right.SetDefault();
-                    OpHandler.operand.Left.SetDefault();
-                    OpHandler.operand.SetLeftActive();
-                    OpHandler.SetExpression(null);
-                    CurrentNumberLabel.Text = OpHandler.operand.Active().GetNumber().ToString();
-                    CurrentExpressionLabel.Text = OpHandler.GetExpressionStr();
+                    Clear();
                     break;
             }
             CurrentNumberLabel.Text = OpHandler.operand.Active().GetText();
+        }
+
+        public void Clear()
+        {
+            OpHandler.operand.Right.SetDefault();
+            OpHandler.operand.Left.SetDefault();
+            OpHandler.operand.SetLeftActive();
+            OpHandler.SetExpression(null);
+            CurrentNumberLabel.Text = OpHandler.operand.Active().GetNumber().ToString();
+            CurrentExpressionLabel.Text = OpHandler.GetExpressionStr();
         }
 
         private void HistoryButtonClicked(object sender, EventArgs e)
@@ -300,7 +315,7 @@ namespace Lab4
             if (historyWindow != null && historyWindow.Visible)
                 return;
 
-            historyWindow = new HistoryWindow(OpHandler);
+            historyWindow = new HistoryWindow(this, OpHandler);
             historyWindow.Show();
         }
 
