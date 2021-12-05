@@ -59,7 +59,7 @@ namespace Lab4
             return Function;
         }
 
-        public void AddFunction(FunctionManager FManager, Func<double, double> f)
+        public void AddFunction(FunctionHandler FManager, Func<double, double> f)
         {
             /*
              * обертывает операнд в указанную функцию

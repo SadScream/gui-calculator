@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Lab4
 {
-    class FunctionManager
+    class FunctionHandler
     {
-        public Dictionary<Func<double, double>, string> functions = new();
-        Resolver Parent;
+        private Dictionary<Func<double, double>, string> functions = new();
+        private Resolver Parent;
 
-        public FunctionManager(Resolver Parent)
+        public FunctionHandler(Resolver Parent)
         {
             this.Parent = Parent;
             functions.Add(Negate, "negate({0})");
@@ -25,6 +25,11 @@ namespace Lab4
             functions.Add(Ctg, "ctg({0})");
             functions.Add(Ln, "ln({0})");
             functions.Add(Lg, "lg({0})");
+        }
+
+        public Dictionary<Func<double, double>, string> GetFunctionMap()
+        {
+            return functions;
         }
 
         public string GetFormat(Func<double, double> f)
@@ -62,13 +67,13 @@ namespace Lab4
 
         public double Perc(double arg)
         {
-            if (Parent.operand.LeftIsActive() || Parent.operand.Active().WaitForInput())
+            if (Parent.OperandManager.LeftIsActive() || Parent.OperandManager.Active().WaitForInput())
             {
-                Parent.operand.Active().SetDefault();
+                Parent.OperandManager.Active().SetDefault();
                 return 0;
             }
 
-            double l = Parent.operand.Left.GetNumber();
+            double l = Parent.OperandManager.Left.GetNumber();
 
             if (Parent.GetOperator() == null)
             {

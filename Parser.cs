@@ -19,11 +19,12 @@ namespace Lab4
 
     class Parser
     {
-        private string Buffer = "";
+        private string Buffer = ""; // прочитанное на данный момент имя функции/число
         private bool Ok = true;
+        private int Position = 0; // переменная, по которой итерируется считывающий цикл для хранения позиция
         private State Current;
-        public Dictionary<string, Func<double, double>> FMap = new();
-        public Dictionary<string, Action> OpMap = new();
+        private Dictionary<string, Func<double, double>> FMap = new();
+        private Dictionary<char, Action> OpMap = new();
         private Stack<Alphabet> AlphabetStack = new Stack<Alphabet>();
         private Stack<string> FunctionStack = new Stack<string>();
 
@@ -37,10 +38,15 @@ namespace Lab4
             FillOperatorNames();
         }
 
-        public bool EvalOperand(char Operator = ' ')
+        public bool EvalOperand()
         {
-            string op = Operator.ToString(),
-                fname;
+            /*
+             * Преобразовывает прочитанные данные в операнд,
+             * применяет над ним функции, сохраненные в процессе
+             * чтения в стеке
+             */
+
+            string fname;
             bool negative = false;
             Func<double, double> tempf;
 
@@ -78,10 +84,24 @@ namespace Lab4
                 }
             }
 
-            if (Operator != ' ')
-                OpHandler.PutOperator(OpMap.GetValueOrDefault(op));
-
             return true;
+        }
+
+        public int GetPosition()
+        {
+            return Position;
+        }
+
+        public void ReplaceOnStack(Stack<Alphabet> stack, Alphabet item)
+        {
+            stack.Pop();
+            stack.Push(item);
+        }
+
+        public void ReplaceOnStack(Stack<string> stack, string item)
+        {
+            stack.Pop();
+            stack.Push(item);
         }
 
         public void PutInBuffer(char c)
@@ -96,8 +116,8 @@ namespace Lab4
 
         public bool IsOperator(char c)
         {
-            Action tmp;
-            return OpMap.TryGetValue(c.ToString(), out tmp);
+            Action _tmp;
+            return OpMap.TryGetValue(c, out _tmp);
         }
 
         public bool IsNumber(char c)
@@ -112,24 +132,36 @@ namespace Lab4
 
         public bool Step(char symbol)
         {
+            /*
+             * магазинный автомат
+             * получает на вход очередной символ обрабатываемой строки и
+             * решает, как с ним нужно поступить и в какое новое состояние
+             * перейти
+             */
+
             switch (Current) {
-                case State.Start:
+                case State.Start: // стартовое состояние
+                    // в любом случае заносим новый символ в буфер
+                    // это может быть либо цифра, либо лат. буква, либо знак -
                     PutInBuffer(symbol);
 
                     if (Letter(symbol))
                     {
+                        // если это буква, значит собираемся читать имя функции
                         Current = State.Function;
                         AlphabetStack.Push(Alphabet.F);
                         return true;
                     }
                     if (IsNumber(symbol))
                     {
+                        // если цифра, то читаем число
                         Current = State.SInteger;
                         AlphabetStack.Push(Alphabet.I);
                         return true;
                     }
                     if (symbol == '-')
                     {
+                        // если -, то читаем отрицательное число
                         Current = State.Negative;
                         return true;
                     }
@@ -142,17 +174,22 @@ namespace Lab4
                     }
                     if (symbol == '(')
                     {
+                        // когда встретили открывающую строку,
+                        // заканчиваем читать имя функции и переходим обратно в стартовое состояние
+                        // откуда мы сможем прочесть вложенную функцию или же аргумент настоящей функции
+
                         FunctionStack.Push(Buffer);
                         ClearBuffer();
                         Current = State.Start;
-                        AlphabetStack.Pop();
-                        AlphabetStack.Push(Alphabet.B);
+                        ReplaceOnStack(AlphabetStack, Alphabet.B);
                         return true;
                     }
                     return false;
                 case State.Negative:
                     if (IsNumber(symbol))
                     {
+                        // читаем цифру и продолжаем читать число дальше
+
                         PutInBuffer(symbol);
                         Current = State.SInteger;
                         AlphabetStack.Push(Alphabet.I);
@@ -167,29 +204,42 @@ namespace Lab4
                     }
                     if (symbol == ',')
                     {
+                        // если встретили запятую, то начинаем читать
+                        // действительное число
+
                         PutInBuffer(symbol);
-                        AlphabetStack.Pop();
-                        AlphabetStack.Push(Alphabet.D);
+                        ReplaceOnStack(AlphabetStack, Alphabet.D);
                         Current = State.SDoube;
                         return true;
                     }
                     if (symbol == ')')
                     {
+                        // если встретили закрывающую скобку, то
+                        // переходим в состояние, из которого будем
+                        // считывать закрывающие скобки до конца
+
                         AlphabetStack.Pop();
                         Current = State.Close;
                         return true;
                     }
                     if (IsOperator(symbol))
                     {
-                        AlphabetStack.Pop();
-                        AlphabetStack.Push(Alphabet.S);
-                        bool success = EvalOperand(symbol);
+                        // если прочитали символ, являющийся оператором, то
+                        // переходим обратно в стартовое состояние, однако
+                        // кладем на стэк значение S, сигнализирующее о том,
+                        // что далее мы собираемся читать уже второй операнд.
+                        // EvalOperand преобразует прочитанное на данный момент значение
+                        // в операнд. PutOperator применяет прочитанный оператор
+
+                        ReplaceOnStack(AlphabetStack, Alphabet.S);
+                        bool success = EvalOperand();
+                        OpHandler.PutOperator(OpMap.GetValueOrDefault(symbol));
                         ClearBuffer();
                         Current = State.Start;
                         return success;
                     }
                     return false;
-                case State.SDoube:
+                case State.SDoube: // работает аналогично SInteger
                     if (IsNumber(symbol))
                     {
                         PutInBuffer(symbol);
@@ -203,9 +253,9 @@ namespace Lab4
                     }
                     if (IsOperator(symbol))
                     {
-                        AlphabetStack.Pop();
-                        AlphabetStack.Push(Alphabet.S);
-                        bool success = EvalOperand(symbol);
+                        ReplaceOnStack(AlphabetStack, Alphabet.S);
+                        bool success = EvalOperand();
+                        OpHandler.PutOperator(OpMap.GetValueOrDefault(symbol));
                         ClearBuffer();
                         Current = State.Start;
                         return success;
@@ -214,14 +264,15 @@ namespace Lab4
                 case State.Close:
                     if (symbol == ')')
                     {
+                        // удаляем закрывающие скобки со стэка
                         AlphabetStack.Pop();
                         return true;
                     }
                     if (IsOperator(symbol))
                     {
-                        AlphabetStack.Pop();
-                        AlphabetStack.Push(Alphabet.S);
-                        bool success = EvalOperand(symbol);
+                        ReplaceOnStack(AlphabetStack, Alphabet.S);
+                        bool success = EvalOperand();
+                        OpHandler.PutOperator(OpMap.GetValueOrDefault(symbol));
                         ClearBuffer();
                         Current = State.Start;
                         return success;
@@ -234,6 +285,7 @@ namespace Lab4
 
         public int Parse(string s)
         {
+            // устанавливаем начальные значения
             Current = State.Start;
             ClearBuffer();
             AlphabetStack.Clear();
@@ -243,23 +295,13 @@ namespace Lab4
 
             Console.WriteLine(s);
 
-            for (int i = 0; i < s.Length; i++) {
-                if (s[i] == ' ') continue;
-                if (s[i] == '=') break;
-                Console.WriteLine("S: {0}", s[i]);
-                Ok = Step(s[i]);
+            // запихиваем в автомат очередной символ
+            for (Position = 0; Position < s.Length; Position++) {
+                if (s[Position] == ' ') continue;
+                if (s[Position] == '=' || s[Position] == '\n') break;
 
+                Ok = Step(s[Position]);
 
-                //Alphabet[] array = new Alphabet[AlphabetStack.Count];
-                //AlphabetStack.CopyTo(array, 0);
-
-                //foreach (Alphabet a in array)
-                //{
-                //    Console.Write(a);
-                //}
-                //Console.WriteLine();
-
-                Console.WriteLine("Ok: {0}", Ok);
                 if (!Ok) return -1;
             }
 
@@ -267,20 +309,30 @@ namespace Lab4
 
             while (AlphabetStack.Count != 0 )
             {
+                // читаем остаточек стэка
+
                 result += AlphabetStack.Pop();
             }
 
-            if (result == "ISZ" || result == "BSZ" || result == "SZ")
+            if (result == "ISZ" || result == "BSZ" || // два операнда
+                result == "BZ" || result == "IZ") // только один операнд
             {
-                EvalOperand();
+                // т.к. в автомате функция EvalOperand вызывается только после
+                // чтения символа оператора, то вызываем ее здесь для случая,
+                // когда есть второй операнд, либо есть только один
+
+                if (EvalOperand())
+                {
+                    return 0;
+                }
             }
 
-            return 0;
+            return -1;
         }
 
         public void FillFunctionNames()
         {
-            foreach (KeyValuePair<Func<double, double>, string> entry in OpHandler.function.functions)
+            foreach (KeyValuePair<Func<double, double>, string> entry in OpHandler.FunctionManager.GetFunctionMap())
             {
                 FMap.Add(entry.Value.Split("(")[0], entry.Key);
             }
@@ -288,9 +340,9 @@ namespace Lab4
 
         public void FillOperatorNames()
         {
-            foreach (KeyValuePair<Action, string> entry in OpHandler.expressions)
+            foreach (KeyValuePair<Action, string> entry in OpHandler.GetExpressions())
             {
-                OpMap.Add(entry.Value, entry.Key);
+                OpMap.Add(entry.Value[0], entry.Key);
             }
         }
     }

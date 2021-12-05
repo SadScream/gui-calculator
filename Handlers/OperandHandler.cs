@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lab4
 {
-    class OperandManager
+    class OperandHandler
     {
         // класс для контроля операндов
 

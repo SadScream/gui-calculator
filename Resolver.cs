@@ -9,28 +9,35 @@ namespace Lab4
         // класс для основной работы с операндами
 
         private List<String> history = new();
-        public readonly Dictionary<Action, string> expressions = new();
+        private Dictionary<Action, string> Expressions = new();
 
         private Action CurrentExpression = null;
         private double Result;
 
+        // функция, которая будет вызываться всякий раз после выполнения какой-либо
+        // математической операции, т.е. сложение/деление/взятие косинуса/возведение в квадрат и т.д.
         public Action EventListener = () => { };
 
-        public OperandManager operand;
-        public FunctionManager function;
+        public OperandHandler OperandManager;
+        public FunctionHandler FunctionManager;
 
         private readonly CultureInfo ci = (CultureInfo)CultureInfo.CurrentCulture.Clone();
 
         public Resolver()
         {
             ci.NumberFormat.NumberDecimalSeparator = ",";
-            expressions.Add(Sum, "+");
-            expressions.Add(Dif, "-");
-            expressions.Add(Div, "/");
-            expressions.Add(Mult, "*");
+            Expressions.Add(Sum, "+");
+            Expressions.Add(Dif, "-");
+            Expressions.Add(Div, "/");
+            Expressions.Add(Mult, "*");
 
-            operand = new OperandManager();
-            function = new FunctionManager(this);
+            OperandManager = new OperandHandler();
+            FunctionManager = new FunctionHandler(this);
+        }
+
+        public Dictionary<Action, string> GetExpressions()
+        {
+            return Expressions;
         }
 
         public List<String> GetHistory()
@@ -59,7 +66,7 @@ namespace Lab4
              * добавление цифры к активному операнду
              */
 
-            operand.Active().Add(textNum);
+            OperandManager.Active().Add(textNum);
         }
 
         public void PutComma()
@@ -68,9 +75,9 @@ namespace Lab4
              * добавление запятой к активному операнду, если возможно
              */
 
-            if (operand.Active().GetFunction() == null && !operand.Active().GetText().Contains(","))
+            if (OperandManager.Active().GetFunction() == null && !OperandManager.Active().GetText().Contains(","))
             {
-                operand.Active().Add(",");
+                OperandManager.Active().Add(",");
             }
         }
 
@@ -81,17 +88,17 @@ namespace Lab4
              * если это функция, обертывание ее в функцию negate
              */
 
-            if (operand.Active().GetText() == "0")
+            if (OperandManager.Active().GetText() == "0")
             {
                 return;
             }
-            if (operand.Active().GetFunction() != null)
+            if (OperandManager.Active().GetFunction() != null)
             {
-                operand.Active().AddFunction(function, function.Negate);
+                OperandManager.Active().AddFunction(FunctionManager, FunctionManager.Negate);
                 return;
             }
-            string CurrentNum = operand.Active().GetText();
-            operand.Active().SetByStr("-" + CurrentNum);
+            string CurrentNum = OperandManager.Active().GetText();
+            OperandManager.Active().SetByStr("-" + CurrentNum);
         }
 
         public void PutOperator(Action e)
@@ -102,12 +109,12 @@ namespace Lab4
 
             CurrentExpression = e;
 
-            if (operand.LeftIsActive())
+            if (OperandManager.LeftIsActive())
             {
-                operand.SetRightActive(true);
+                OperandManager.SetRightActive(true);
             } else
             {
-                operand.SetLeftActive(true);
+                OperandManager.SetLeftActive(true);
             }
         }
 
@@ -118,12 +125,12 @@ namespace Lab4
              * Для обертывания в negate есть отельная функция PutNegative
              */
 
-            if (f == function.Negate)
+            if (f == FunctionManager.Negate)
             {
                 PutNegative();
                 return;
             }
-            operand.Active().AddFunction(function, f);
+            OperandManager.Active().AddFunction(FunctionManager, f);
             FunctionDone();
         }
 
@@ -144,22 +151,22 @@ namespace Lab4
 
         public void Sum()
         {
-            Result = operand.Left.GetNumber() + operand.Right.GetNumber();
+            Result = OperandManager.Left.GetNumber() + OperandManager.Right.GetNumber();
         }
 
         public void Dif()
         {
-            Result = operand.Left.GetNumber() - operand.Right.GetNumber();
+            Result = OperandManager.Left.GetNumber() - OperandManager.Right.GetNumber();
         }
 
         public void Div()
         {
-            Result = operand.Left.GetNumber() / operand.Right.GetNumber();
+            Result = OperandManager.Left.GetNumber() / OperandManager.Right.GetNumber();
         }
 
         public void Mult()
         {
-            Result = operand.Left.GetNumber() * operand.Right.GetNumber();
+            Result = OperandManager.Left.GetNumber() * OperandManager.Right.GetNumber();
         }
 
         private void FunctionDone()
@@ -167,8 +174,8 @@ namespace Lab4
             // журналирование для операций с одним операндом
 
             history.Add(String.Format("{0} = {1}",
-                operand.Active().GetText(),
-                operand.Active().GetNumber()));
+                OperandManager.Active().GetText(),
+                OperandManager.Active().GetNumber()));
 
             EventListener();
         }
@@ -177,9 +184,9 @@ namespace Lab4
         {
             // журналирование для операций с двумя операндами
 
-            string left = operand.Left.GetText(), 
-                operatorSymbol = expressions.GetValueOrDefault(CurrentExpression),
-                right = operand.Right.GetText();
+            string left = OperandManager.Left.GetText(), 
+                operatorSymbol = Expressions.GetValueOrDefault(CurrentExpression),
+                right = OperandManager.Right.GetText();
 
             history.Add(String.Format("{0:F} {1} {2:F} = {3}", 
                 left,
@@ -198,15 +205,15 @@ namespace Lab4
 
             string r = "";
 
-            r += operand.Left.GetText();
+            r += OperandManager.Left.GetText();
 
             if (CurrentExpression != null)
             {
-                r += " " + expressions.GetValueOrDefault(CurrentExpression);
+                r += " " + Expressions.GetValueOrDefault(CurrentExpression);
 
-                if (operand.RightIsActive() && !operand.Right.WaitForInput())
+                if (OperandManager.RightIsActive() && !OperandManager.Right.WaitForInput())
                 {
-                    r += " " + operand.Right.GetText();
+                    r += " " + OperandManager.Right.GetText();
                 }
             }
 

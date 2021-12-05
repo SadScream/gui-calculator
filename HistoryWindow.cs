@@ -39,26 +39,99 @@ namespace Lab4
 
         private void uploadButton_Click(object sender, EventArgs e)
         {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Text File|*.txt";
+            saveFileDialog.Title = "Сохранить историю";
+            saveFileDialog.ShowDialog();
 
+            if (saveFileDialog.FileName != "")
+            {
+                System.IO.FileStream fs = (System.IO.FileStream)saveFileDialog.OpenFile();
+
+                foreach (string elem in ExpressionBox.Items)
+                {
+                    byte[] info = Encoding.UTF8.GetBytes(elem + "\n");
+                    fs.Write(info);
+                }
+
+                fs.Close();
+            }
         }
 
         private void downloadButton_Click(object sender, EventArgs e)
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text File|*.txt";
+            openFileDialog.Title = "Открыть файл";
 
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = openFileDialog.FileName;
+
+                var fileStream = openFileDialog.OpenFile();
+
+                using (System.IO.StreamReader reader = new System.IO.StreamReader(fileStream))
+                {
+                    for (int i = 1; reader.Peek() >= 0; i++)
+                    {
+                        MainW.Clear();
+                        string str = reader.ReadLine();
+                        Console.WriteLine("to parse: {0}", str);
+                        int result = ExpParser.Parse(str);
+
+                        Console.WriteLine("parser int result: {0}", result);
+
+                        if (result == -1)
+                        {
+                            OpHandler.EventListener = updateList;
+                            MessageBox.Show(String.Format("Ошибка в строке {0} позиции {1}", 
+                                i, ExpParser.GetPosition()+1),
+                                "Ошибка", MessageBoxButtons.OK);
+                            return;
+                        }
+                    }
+
+                    if (OpHandler.GetOperator() != null)
+                    {
+                        MainW.Solve();
+                    }
+                    else
+                    {
+                        MainW.SetCurrentNumber(OpHandler.OperandManager.Active().GetNumber().ToString());
+                    }
+                }
+            }
         }
 
         private void ExpressionBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             MainW.Clear();
-            ListBox ExpressionBox = (ListBox)sender;
-            ExpParser.Parse(ExpressionBox.SelectedItem.ToString());
-            MainW.SetCurrentExpression(OpHandler.GetExpressionStr());
 
-            if (OpHandler.Solve())
-                MainW.SetCurrentNumber(OpHandler.GetResult().ToString());
-            else
-                MainW.SetCurrentNumber(OpHandler.operand.Active().GetNumber().ToString());
-            //listbox.SelectedItem;
+            OpHandler.EventListener = () => { }; // чтобы не захламлять окно истории, удаляем функцию обновления
+            int result = ExpParser.Parse(ExpressionBox.SelectedItem.ToString());
+
+            Console.WriteLine("parser int result: {0}", result);
+
+            if (result == -1)
+            {
+                OpHandler.EventListener = updateList;
+                MessageBox.Show(String.Format("Ошибка в позиции {0}", ExpParser.GetPosition()+1),
+                    "Ошибка", MessageBoxButtons.OK);
+                return;
+            }
+
+            if (OpHandler.GetOperator() != null)
+            {
+                MainW.Solve();
+            } else
+            {
+                MainW.SetCurrentNumber(OpHandler.OperandManager.Active().GetNumber().ToString());
+            }
+            
+            //Console.WriteLine("exp_text: op1:{0} exp:{1} op2:{2}", 
+            //    OpHandler.OperandManager.Left.GetText(), 
+            //    OpHandler.GetOperator(), 
+            //    OpHandler.OperandManager.Right.GetText());
         }
     }
 }

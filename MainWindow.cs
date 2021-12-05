@@ -93,7 +93,7 @@ namespace Lab4
             f();
         }
 
-        private void Solve()
+        public void Solve()
         {
             /*
              * Выводит на CurrentNumberLabel результат вычисления
@@ -104,14 +104,14 @@ namespace Lab4
                 CurrentNumberLabel.Text = OpHandler.GetResult().ToString(); // выводим
 
                 // полностью стираем выражение и в качестве левого операнда устанавливаем результат
-                OpHandler.operand.Right.SetDefault();
-                OpHandler.operand.Left.SetDefault();
+                OpHandler.OperandManager.Right.SetDefault();
+                OpHandler.OperandManager.Left.SetDefault();
                 OpHandler.SetExpression(null);
 
                 CurrentExpressionLabel.Text = OpHandler.GetExpressionStr();
 
-                OpHandler.operand.Left.SetByStr(OpHandler.GetResult().ToString());
-                OpHandler.operand.SetLeftActive(true);
+                OpHandler.OperandManager.Left.SetByStr(OpHandler.GetResult().ToString());
+                OpHandler.OperandManager.SetLeftActive(true);
             }
         }
 
@@ -125,7 +125,7 @@ namespace Lab4
             // обрабатываем нажатие на клавишу с цифрой
 
             string number = ((Button)sender).Text;
-            Operand activeOperand = OpHandler.operand.Active();
+            Operand activeOperand = OpHandler.OperandManager.Active();
 
             if (activeOperand.GetFunction() != null)
             {
@@ -157,12 +157,12 @@ namespace Lab4
             Button b = (Button)sender;
             string operation = b.Name;
 
-            if (OpHandler.operand.RightIsActive() && 
-                !OpHandler.operand.Active().WaitForInput())
+            if (OpHandler.OperandManager.RightIsActive() && 
+                !OpHandler.OperandManager.Active().WaitForInput())
             {
                 // если в данный момент уже введено какое-то выражение и вновь производится клик
                 // по оператору, то решаем это выражение
-
+                Console.WriteLine("double op clicked, waitforinput: {0}", OpHandler.OperandManager.Active().WaitForInput());
                 Solve();
             }
 
@@ -184,13 +184,13 @@ namespace Lab4
 
             CurrentExpressionLabel.Text = OpHandler.GetExpressionStr();
             
-            if (OpHandler.operand.RightIsActive())
+            if (OpHandler.OperandManager.RightIsActive())
             {
                 // устанавливаем в качестве правого оператора то же число, что и для левого оператора,
                 // чтоб в случае, если пользователь сразу нажмет '=', посчитать результат для одного и того же числа
                 // как в оригнинальном калькуляторе
 
-                OpHandler.operand.Right.SetByNum(OpHandler.operand.Left.GetNumber());
+                OpHandler.OperandManager.Right.SetByNum(OpHandler.OperandManager.Left.GetNumber());
             }
         }
 
@@ -205,41 +205,41 @@ namespace Lab4
             switch (operation)
             {
                 case "SquareButton":
-                    OpHandler.PutFunction(OpHandler.function.Sqr);
+                    OpHandler.PutFunction(OpHandler.FunctionManager.Sqr);
                     break;
                 case "RadicalButton":
-                    OpHandler.PutFunction(OpHandler.function.Sqrt);
+                    OpHandler.PutFunction(OpHandler.FunctionManager.Sqrt);
                     break;
                 case "CosButton":
-                    OpHandler.PutFunction(OpHandler.function.Cos);
+                    OpHandler.PutFunction(OpHandler.FunctionManager.Cos);
                     break;
                 case "SinButton":
-                    OpHandler.PutFunction(OpHandler.function.Sin);
+                    OpHandler.PutFunction(OpHandler.FunctionManager.Sin);
                     break;
                 case "TgButton":
-                    OpHandler.PutFunction(OpHandler.function.Tg);
+                    OpHandler.PutFunction(OpHandler.FunctionManager.Tg);
                     break;
                 case "CtgButton":
-                    OpHandler.PutFunction(OpHandler.function.Ctg);
+                    OpHandler.PutFunction(OpHandler.FunctionManager.Ctg);
                     break;
                 case "LnButton":
-                    OpHandler.PutFunction(OpHandler.function.Ln);
+                    OpHandler.PutFunction(OpHandler.FunctionManager.Ln);
                     break;
                 case "LgButton":
-                    OpHandler.PutFunction(OpHandler.function.Lg);
+                    OpHandler.PutFunction(OpHandler.FunctionManager.Lg);
                     break;
                 case "ReverseButton":
-                    OpHandler.PutFunction(OpHandler.function.Rev);
+                    OpHandler.PutFunction(OpHandler.FunctionManager.Rev);
                     break;
                 case "PercentButton":
-                    OpHandler.PutFunction(OpHandler.function.Perc);
+                    OpHandler.PutFunction(OpHandler.FunctionManager.Perc);
                     break;
                 case "PosOrNegButton":
                     OpHandler.PutNegative();
                     break;
             }
 
-            CurrentNumberLabel.Text = OpHandler.operand.Active().GetNumber().ToString();
+            CurrentNumberLabel.Text = OpHandler.OperandManager.Active().GetNumber().ToString();
             CurrentExpressionLabel.Text = OpHandler.GetExpressionStr();
             SetInputSettings(DefaultInputLength, IncreaseFontSize);
         }
@@ -251,7 +251,7 @@ namespace Lab4
              */
 
             string operation = ((Button)sender).Name;
-            string currentValue = OpHandler.operand.Active().GetText();
+            string currentValue = OpHandler.OperandManager.Active().GetText();
 
             switch (operation)
             {
@@ -259,7 +259,7 @@ namespace Lab4
                     OpHandler.PutComma();
                     break;
                 case "DeleteButton":
-                    Operand activeOperand = OpHandler.operand.Active();
+                    Operand activeOperand = OpHandler.OperandManager.Active();
 
                     if (activeOperand.GetText() == "0" || activeOperand.GetFunction() != null)
                         return;
@@ -286,8 +286,8 @@ namespace Lab4
                     IncreaseFontSize();
                     break;
                 case "CancelEntryButton":
-                    OpHandler.operand.Active().SetDefault();
-                    CurrentNumberLabel.Text = OpHandler.operand.Active().GetNumber().ToString();
+                    OpHandler.OperandManager.Active().SetDefault();
+                    CurrentNumberLabel.Text = OpHandler.OperandManager.Active().GetNumber().ToString();
                     CurrentExpressionLabel.Text = OpHandler.GetExpressionStr();
                     SetInputSettings(DefaultInputLength, IncreaseFontSize);
                     break;
@@ -295,16 +295,16 @@ namespace Lab4
                     Clear();
                     break;
             }
-            CurrentNumberLabel.Text = OpHandler.operand.Active().GetText();
+            CurrentNumberLabel.Text = OpHandler.OperandManager.Active().GetText();
         }
 
         public void Clear()
         {
-            OpHandler.operand.Right.SetDefault();
-            OpHandler.operand.Left.SetDefault();
-            OpHandler.operand.SetLeftActive();
+            OpHandler.OperandManager.Right.SetDefault();
+            OpHandler.OperandManager.Left.SetDefault();
+            OpHandler.OperandManager.SetLeftActive();
             OpHandler.SetExpression(null);
-            CurrentNumberLabel.Text = OpHandler.operand.Active().GetNumber().ToString();
+            CurrentNumberLabel.Text = OpHandler.OperandManager.Active().GetNumber().ToString();
             CurrentExpressionLabel.Text = OpHandler.GetExpressionStr();
         }
 
