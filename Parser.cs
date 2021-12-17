@@ -22,11 +22,11 @@ namespace Lab4
         private string Buffer = ""; // прочитанное на данный момент имя функции/число
         private bool Ok = true;
         private int Position = 0; // переменная, по которой итерируется считывающий цикл для хранения позиция
-        private State Current;
-        private Dictionary<string, Func<double, double>> FMap = new();
-        private Dictionary<char, Action> OpMap = new();
-        private Stack<Alphabet> AlphabetStack = new Stack<Alphabet>();
-        private Stack<string> FunctionStack = new Stack<string>();
+        private State Current; // текущее состояние
+        private Dictionary<string, Func<Decimal, Decimal>> FMap = new(); // соответствие строки и функции по типу sqr, sqrt
+        private Dictionary<char, Action> OpMap = new(); // соответствие строки и оператора по типу +, -
+        private Stack<Alphabet> AlphabetStack = new Stack<Alphabet>(); // стек букв
+        private Stack<string> FunctionStack = new Stack<string>(); // стек функций
 
         private Resolver OpHandler;
 
@@ -48,40 +48,27 @@ namespace Lab4
 
             string fname;
             bool negative = false;
-            Func<double, double> tempf;
+            Func<Decimal, Decimal> tempf;
 
             foreach (char number in Buffer)
             {
                 if (number == '-')
-                {
                     negative = true;
-                } else if (number == ',')
-                {
+                else if (number == ',')
                     OpHandler.PutComma();
-                } else
-                {
+                else
                     OpHandler.PutNum(number.ToString());
-                }
             }
 
-            if (negative)
-            {
-                OpHandler.PutNegative();
-            }
-
+            if (negative) OpHandler.PutNegative();
             
-            while (FunctionStack.Count() != 0)
-            {
+            while (FunctionStack.Count() != 0) {
                 fname = FunctionStack.Pop();
 
                 if (FMap.TryGetValue(fname, out tempf))
-                {
                     OpHandler.PutFunction(tempf);
-                }
                 else
-                {
                     return false;
-                }
             }
 
             return true;
@@ -293,32 +280,24 @@ namespace Lab4
             Ok = true;
             AlphabetStack.Push(Alphabet.Z);
 
-            Console.WriteLine(s);
-
             // запихиваем в автомат очередной символ
             for (Position = 0; Position < s.Length; Position++) {
                 if (s[Position] == ' ') continue;
                 if (s[Position] == '=' || s[Position] == '\n') break;
 
                 Ok = Step(s[Position]);
-
                 if (!Ok) return -1;
             }
 
             string result = "";
 
-            while (AlphabetStack.Count != 0 )
-            {
-                // читаем остаточек стэка
-
+            while (AlphabetStack.Count != 0 ) // читаем остаток стэка
                 result += AlphabetStack.Pop();
-            }
 
-            if (result == "ISZ" || result == "BSZ" || // два операнда
-                result == "BZ" || result == "IZ") // только один операнд
+            if (result == "ISZ" || result == "BSZ" || result == "DSZ" || // два операнда
+                result == "BZ" || result == "IZ" || result == "DZ") // только один операнд
             {
-                // т.к. в автомате функция EvalOperand вызывается только после
-                // чтения символа оператора, то вызываем ее здесь для случая,
+                // т.к. в автомате функция EvalOperand вызывается только после чтения символа оператора, то вызываем ее здесь для случая,
                 // когда есть второй операнд, либо есть только один
 
                 if (EvalOperand())
@@ -332,7 +311,7 @@ namespace Lab4
 
         public void FillFunctionNames()
         {
-            foreach (KeyValuePair<Func<double, double>, string> entry in OpHandler.FunctionManager.GetFunctionMap())
+            foreach (KeyValuePair<Func<Decimal, Decimal>, string> entry in OpHandler.FunctionManager.GetFunctionMap())
             {
                 FMap.Add(entry.Value.Split("(")[0], entry.Key);
             }

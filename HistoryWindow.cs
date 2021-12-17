@@ -76,7 +76,6 @@ namespace Lab4
                     {
                         MainW.Clear();
                         string str = reader.ReadLine();
-                        Console.WriteLine("to parse: {0}", str);
                         int result = ExpParser.Parse(str);
 
                         Console.WriteLine("parser int result: {0}", result);
@@ -89,15 +88,15 @@ namespace Lab4
                                 "Ошибка", MessageBoxButtons.OK);
                             return;
                         }
-                    }
 
-                    if (OpHandler.GetOperator() != null)
-                    {
-                        MainW.Solve();
-                    }
-                    else
-                    {
-                        MainW.SetCurrentNumber(OpHandler.OperandManager.Active().GetNumber().ToString());
+                        if (OpHandler.GetOperator() != null)
+                        {
+                            MainW.Solve();
+                        }
+                        else
+                        {
+                            MainW.SetNumber(OpHandler.OperandManager.Active().GetNumber().ToString());
+                        }
                     }
                 }
             }
@@ -105,6 +104,8 @@ namespace Lab4
 
         private void ExpressionBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (ExpressionBox.SelectedItem == null) return;
+
             MainW.Clear();
 
             OpHandler.EventListener = () => { }; // чтобы не захламлять окно истории, удаляем функцию обновления
@@ -125,13 +126,10 @@ namespace Lab4
                 MainW.Solve();
             } else
             {
-                MainW.SetCurrentNumber(OpHandler.OperandManager.Active().GetNumber().ToString());
+                MainW.SetNumber(OpHandler.OperandManager.Active().GetNumber().ToString());
             }
-            
-            //Console.WriteLine("exp_text: op1:{0} exp:{1} op2:{2}", 
-            //    OpHandler.OperandManager.Left.GetText(), 
-            //    OpHandler.GetOperator(), 
-            //    OpHandler.OperandManager.Right.GetText());
+
+            OpHandler.EventListener = updateList;
         }
     }
 }

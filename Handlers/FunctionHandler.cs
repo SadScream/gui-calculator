@@ -8,7 +8,7 @@ namespace Lab4
 {
     class FunctionHandler
     {
-        private Dictionary<Func<double, double>, string> functions = new();
+        private Dictionary<Func<Decimal, Decimal>, string> functions = new();
         private Resolver Parent;
 
         public FunctionHandler(Resolver Parent)
@@ -27,12 +27,12 @@ namespace Lab4
             functions.Add(Lg, "lg({0})");
         }
 
-        public Dictionary<Func<double, double>, string> GetFunctionMap()
+        public Dictionary<Func<Decimal, Decimal>, string> GetFunctionMap()
         {
             return functions;
         }
 
-        public string GetFormat(Func<double, double> f)
+        public string GetFormat(Func<Decimal, Decimal> f)
         {
             /*
              * возвращает строковый формат, в котором представляется функция
@@ -41,31 +41,31 @@ namespace Lab4
             return functions[f];
         }
 
-        public double Negate(double arg)
+        public Decimal Negate(Decimal arg)
         {
-            double r = -1 * arg;
+            Decimal r = -1 * arg;
             return r;
         }
 
-        public double Sqrt(double arg)
+        public Decimal Sqrt(Decimal arg)
         {
-            double r = Math.Sqrt(arg);
+            Decimal r = (Decimal)Math.Sqrt((double)arg);
             return r;
         }
 
-        public double Sqr(double arg)
+        public Decimal Sqr(Decimal arg)
         {
-            double r = arg * arg;
+            Decimal r = arg * arg;
             return r;
         }
 
-        public double Rev(double arg)
+        public Decimal Rev(Decimal arg)
         {
-            double r = 1 / arg;
+            Decimal r = 1 / arg;
             return r;
         }
 
-        public double Perc(double arg)
+        public Decimal Perc(Decimal arg)
         {
             if (Parent.OperandManager.LeftIsActive() || Parent.OperandManager.Active().WaitForInput())
             {
@@ -73,49 +73,49 @@ namespace Lab4
                 return 0;
             }
 
-            double l = Parent.OperandManager.Left.GetNumber();
+            Decimal l = Parent.OperandManager.Left.GetNumber();
 
             if (Parent.GetOperator() == null)
             {
                 l = 0;
             }
-            double r = l / 100.0 * arg;
+            Decimal r = (l / (Decimal)100.0) * arg;
             return r;
         }
 
-        public double Cos(double arg)
+        public Decimal Cos(Decimal arg)
         {
-            double r = Math.Cos(arg);
+            Decimal r = (Decimal)Math.Cos((double)arg);
             return r;
         }
 
-        public double Sin(double arg)
+        public Decimal Sin(Decimal arg)
         {
-            double r = Math.Sin(arg);
+            Decimal r = (Decimal)Math.Sin((double)arg);
             return r;
         }
 
-        public double Tg(double arg)
+        public Decimal Tg(Decimal arg)
         {
-            double r = Math.Tan(arg);
+            Decimal r = (Decimal)Math.Tan((double)arg);
             return r;
         }
 
-        public double Ctg(double arg)
+        public Decimal Ctg(Decimal arg)
         {
-            double r = 1.0 / Math.Tan(arg);
+            Decimal r = (Decimal)(1.0 / Math.Tan((double)arg));
             return r;
         }
 
-        public double Ln(double arg)
+        public Decimal Ln(Decimal arg)
         {
-            double r = Math.Log(arg);
+            Decimal r = (Decimal)Math.Log((double)arg);
             return r;
         }
 
-        public double Lg(double arg)
+        public Decimal Lg(Decimal arg)
         {
-            double r = Math.Log10(arg);
+            Decimal r = (Decimal)Math.Log10((double)arg);
             return r;
         }
     }

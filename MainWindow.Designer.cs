@@ -445,7 +445,7 @@ namespace Lab4
             this.PosOrNegButton.TabIndex = 20;
             this.PosOrNegButton.Text = "+/-";
             this.PosOrNegButton.UseVisualStyleBackColor = false;
-            this.PosOrNegButton.Click += new System.EventHandler(this.SingleOperatorClicked);
+            this.PosOrNegButton.Click += new System.EventHandler(this.EditingButtonClicked);
             // 
             // ZeroButton
             // 

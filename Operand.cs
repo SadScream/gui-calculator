@@ -8,9 +8,9 @@ namespace Lab4
         // класс для непосредственной работы с операндом
 
         private string Format = "{0}"; // то, как будет выводиться операнд. Например, может быть sqrt({0})
-        private Func<double, double> Function = null; // последняя функция, в которую был обернут операнд
+        private Func<Decimal, Decimal> Function = null; // последняя функция, в которую был обернут операнд
         private string Text = "0"; // текстовое представление операнда
-        private double Number = 0; // числовое представление операнда
+        private Decimal Number = 0; // числовое представление операнда
         private bool waitForInputStart = true; // начат ли ввод цифр в оператор. Становится true при модификации через Add/AddFunction
         private readonly CultureInfo ci = (CultureInfo)CultureInfo.CurrentCulture.Clone(); // для правильного вывода
 
@@ -54,12 +54,12 @@ namespace Lab4
             return Format;
         }
 
-        public Func<double, double> GetFunction()
+        public Func<Decimal, Decimal> GetFunction()
         {
             return Function;
         }
 
-        public void AddFunction(FunctionHandler FManager, Func<double, double> f)
+        public void AddFunction(FunctionHandler FManager, Func<Decimal, Decimal> f)
         {
             /*
              * обертывает операнд в указанную функцию
@@ -76,14 +76,14 @@ namespace Lab4
             AddFormat(FManager.GetFormat(f));
         }
 
-        public void SetFormat(string f)
-        {
-            Format = f;
-        }
-
         public void AddFormat(string f)
         {
             Format = String.Format(f, Format);
+        }
+
+        public void SetFormat(string f)
+        {
+            Format = f;
         }
 
         public string GetText()
@@ -91,7 +91,7 @@ namespace Lab4
             return string.Format(Format, Text);
         }
 
-        public double GetNumber()
+        public Decimal GetNumber()
         {
             if (Function != null)
             {
@@ -100,23 +100,19 @@ namespace Lab4
             return Number;
         }
 
-        public void SetByStr(string s)
-        {
+        public void SetByStr(string s) {
             /*
-             * Устанавливает числовое и строковое значение операнда по строке
-             * Автоматически удаляет функции, в которые обурнут операнд
+             * Устанавливает числовое и строковое значение операнда по строке. Автоматически удаляет функции, в которые обурнут операнд
              */
 
             DeleteFunctions();
             Text = s;
-            Number = double.Parse(s);
+            Number = Decimal.Parse(s);
         }
 
-        public void SetByNum(double num)
-        {
+        public void SetByNum(Decimal num) {
             /*
-             * Устанавливает числовое и строковое значение операнда по числу
-             * Автоматически удаляет функции, в которые обурнут операнд
+             * Устанавливает числовое и строковое значение операнда по числу. Автоматически удаляет функции, в которые обурнут операнд
              */
 
             DeleteFunctions();
@@ -124,8 +120,7 @@ namespace Lab4
             Text = num.ToString();
         }
 
-        public void Add(string d)
-        {
+        public void Add(string d) {
             /*
              * Добавляет новый символ к операнду
              */
@@ -137,7 +132,7 @@ namespace Lab4
                 Text = "";
             }
             Text += d;
-            Number = double.Parse(Text, ci);
+            Number = Decimal.Parse(Text, ci);
         }
     }
 }

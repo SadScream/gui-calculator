@@ -8,14 +8,16 @@ namespace Lab4
     {
         // класс для основной работы с операндами
 
-        private List<String> history = new();
+        private List<String> history = new(); // история
         private Dictionary<Action, string> Expressions = new();
 
-        private Action CurrentExpression = null;
-        private double Result;
+        private Action CurrentExpression = null; // операция, которую хотим применить над операндами
+        private Decimal Result; // результат применения операции
 
         // функция, которая будет вызываться всякий раз после выполнения какой-либо
         // математической операции, т.е. сложение/деление/взятие косинуса/возведение в квадрат и т.д.
+        // устанавливается классом HistoryWindow, для того, чтоб добавлять новый элемент в историю
+        // всякий раз после выполнения операции
         public Action EventListener = () => { };
 
         public OperandHandler OperandManager;
@@ -45,7 +47,7 @@ namespace Lab4
             return history;
         }
 
-        public double GetResult()
+        public Decimal GetResult()
         {
             return Result;
         }
@@ -81,24 +83,29 @@ namespace Lab4
             }
         }
 
-        public void PutNegative()
+        public bool PutNegative()
         {
             /*
              * преобразование активного операнда в отрицательное число, либо,
              * если это функция, обертывание ее в функцию negate
+             * возвращает true, если было преобразовано в отрицательное
+             * и false, если из отрицательного преобразовалось в положительное,
+             * либо был ноль
              */
 
             if (OperandManager.Active().GetText() == "0")
             {
-                return;
+                return false;
             }
             if (OperandManager.Active().GetFunction() != null)
             {
                 OperandManager.Active().AddFunction(FunctionManager, FunctionManager.Negate);
-                return;
+                return false;
             }
-            string CurrentNum = OperandManager.Active().GetText();
-            OperandManager.Active().SetByStr("-" + CurrentNum);
+            Decimal CurrentNum = OperandManager.Active().GetNumber();
+            OperandManager.Active().SetByNum(-1 * CurrentNum);
+
+            return CurrentNum > 0;
         }
 
         public void PutOperator(Action e)
@@ -118,7 +125,7 @@ namespace Lab4
             }
         }
 
-        public void PutFunction(Func<double, double> f)
+        public void PutFunction(Func<Decimal, Decimal> f)
         {
             /*
              * Обертывание текущего активного операнда в функцию
