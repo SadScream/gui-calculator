@@ -18,7 +18,10 @@ namespace Lab4
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow());
+            Console.WriteLine();
+            //Application.Run(new MainWindow());
+            UParser parser = new UParser(new ExpressionHandler());
+            Console.WriteLine(parser.Evaluate("10 + 120 * 10%"));
         }
     }
 }

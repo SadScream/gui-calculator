@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 
 namespace Lab4
 {
-    class FunctionHandler
+    class UFunctionHandler
     {
         private Dictionary<Func<Decimal, Decimal>, string> functions = new();
-        private Resolver resolver;
+        private ExpressionHandler ExpHandler;
 
-        public FunctionHandler(Resolver parent)
+        public UFunctionHandler(ExpressionHandler parent)
         {
-            resolver = parent;
+            ExpHandler = parent;
             functions.Add(Negate, "negate({0})");
             functions.Add(Sqrt, "sqrt({0})");
             functions.Add(Sqr, "sqr({0})");
             functions.Add(Rev, "reverse({0})");
-            functions.Add(Perc, "proc({0})");
             functions.Add(Cos, "cos({0})");
             functions.Add(Sin, "sin({0})");
             functions.Add(Tg, "tg({0})");
@@ -69,24 +68,6 @@ namespace Lab4
         public Decimal Rev(Decimal arg)
         {
             Decimal r = 1 / arg;
-            return r;
-        }
-
-        public Decimal Perc(Decimal arg)
-        {
-            if (resolver.OperandManager.LeftIsActive() || resolver.OperandManager.Active().WaitForInput())
-            {
-                resolver.OperandManager.Active().SetDefault();
-                return 0;
-            }
-
-            Decimal l = resolver.OperandManager.Left.GetNumber();
-
-            if (resolver.GetOperator() == null)
-            {
-                l = 0;
-            }
-            Decimal r = (l / (Decimal)100.0) * arg;
             return r;
         }
 

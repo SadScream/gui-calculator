@@ -13,28 +13,28 @@ namespace Lab4
     partial class HistoryWindow : Form
     {
         public MainWindow MainW;
-        public Resolver OpHandler;
-        public Parser ExpParser;
+        public ExpressionHandler resolver;
+        public UParser ExpParser;
 
-        public HistoryWindow(MainWindow main, Resolver OpHandler)
+        public HistoryWindow(MainWindow main, ExpressionHandler resolver)
         {
             InitializeComponent();
 
-            this.OpHandler = OpHandler;
+            this.resolver = resolver;
 
-            for (int i = 0; i < OpHandler.GetHistory().Count(); i++)
+            for (int i = 0; i < resolver.GetHistory().Count(); i++)
             {
-                ExpressionBox.Items.Add(OpHandler.GetHistory()[i]);
+                ExpressionBox.Items.Add(resolver.GetHistory()[i]);
             }
 
             MainW = main;
-            OpHandler.EventListener = updateList;
-            ExpParser = new Parser(OpHandler);
+            resolver.EventListener = updateList;
+            ExpParser = new UParser(resolver);
         }
 
         private void updateList()
         {
-            ExpressionBox.Items.Add(OpHandler.GetHistory().Last());
+            ExpressionBox.Items.Add(resolver.GetHistory().Last());
         }
 
         private void uploadButton_Click(object sender, EventArgs e)
@@ -76,27 +76,20 @@ namespace Lab4
                     {
                         MainW.Clear();
                         string str = reader.ReadLine();
-                        int result = ExpParser.Parse(str);
+                        KeyValuePair<Decimal, string> result = ExpParser.Evaluate(str);
 
-                        Console.WriteLine("parser int result: {0}", result);
+                        Console.WriteLine("parser int result: {0}", result.Key);
 
-                        if (result == -1)
+                        if (result.Value.Length != 0)
                         {
-                            OpHandler.EventListener = updateList;
-                            MessageBox.Show(String.Format("Ошибка в строке {0} позиции {1}", 
-                                i, ExpParser.GetPosition()+1),
+                            resolver.EventListener = updateList;
+                            MessageBox.Show(String.Format("Ошибка: {0}", result.Value),
                                 "Ошибка", MessageBoxButtons.OK);
                             return;
                         }
 
-                        if (OpHandler.GetOperator() != null)
-                        {
-                            MainW.Solve();
-                        }
-                        else
-                        {
-                            MainW.SetNumber(OpHandler.OperandManager.Active().GetNumber().ToString());
-                        }
+                        resolver.SetOperandToDefault();
+                        MainW.SetNumber(result.Key.ToString());
                     }
                 }
             }
@@ -108,28 +101,23 @@ namespace Lab4
 
             MainW.Clear();
 
-            OpHandler.EventListener = () => { }; // чтобы не захламлять окно истории, удаляем функцию обновления
-            int result = ExpParser.Parse(ExpressionBox.SelectedItem.ToString());
+            resolver.EventListener = () => { }; // чтобы не захламлять окно истории, удаляем функцию обновления
+            KeyValuePair<Decimal, string> result = ExpParser.Evaluate(ExpressionBox.SelectedItem.ToString());
 
-            Console.WriteLine("parser int result: {0}", result);
+            Console.WriteLine("parser int result: {0}", result.Key);
 
-            if (result == -1)
+            if (result.Value.Length != 0)
             {
-                OpHandler.EventListener = updateList;
-                MessageBox.Show(String.Format("Ошибка в позиции {0}", ExpParser.GetPosition()+1),
+                resolver.EventListener = updateList;
+                MessageBox.Show(String.Format("Ошибка: {0}", result.Value),
                     "Ошибка", MessageBoxButtons.OK);
                 return;
             }
 
-            if (OpHandler.GetOperator() != null)
-            {
-                MainW.Solve();
-            } else
-            {
-                MainW.SetNumber(OpHandler.OperandManager.Active().GetNumber().ToString());
-            }
+            resolver.SetOperandToDefault();
+            MainW.SetNumber(result.Key.ToString());
 
-            OpHandler.EventListener = updateList;
+            resolver.EventListener = updateList;
         }
     }
 }

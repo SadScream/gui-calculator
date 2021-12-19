@@ -11,7 +11,7 @@ namespace Lab4
         private const SByte DefaultInputLength = 16;
         private SByte MaxInputLength;
 
-        private Resolver OpHandler;
+        private ExpressionHandler resolver;
 
         private Font defaultFont = new("Segoe UI", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
         private Font middleFont = new("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -23,7 +23,7 @@ namespace Lab4
         {
             InitializeComponent();
             AdditionalDisplay(true);
-            OpHandler = new Resolver();
+            resolver = new ExpressionHandler();
             MaxInputLength = DefaultInputLength;
         }
 
@@ -99,19 +99,21 @@ namespace Lab4
              * Выводит на CurrentNumberLabel результат вычисления
              */
 
-            if (OpHandler.Solve()) // вычисляем
+            if (resolver.Solve()) // вычисляем
             {
-                SetNumber(OpHandler.GetResult().ToString()); // выводим
+                SetNumber(resolver.GetResult().ToString()); // выводим
+                SetExpression(resolver.GetExpression());
+                resolver.LastOperand.SetWaiting(true);
 
-                // полностью стираем выражение и в качестве левого операнда устанавливаем результат
-                OpHandler.OperandManager.Right.SetDefault();
-                OpHandler.OperandManager.Left.SetDefault();
-                OpHandler.SetExpression(null);
+                //// полностью стираем выражение и в качестве левого операнда устанавливаем результат
+                //resolver.OperandManager.Right.SetDefault();
+                //resolver.OperandManager.Left.SetDefault();
+                //resolver.SetExpression(null);
 
-                SetExpression(OpHandler.GetExpressionStr());
+                //SetExpression(resolver.GetExpression());
 
-                OpHandler.OperandManager.Left.SetByStr(OpHandler.GetResult().ToString());
-                OpHandler.OperandManager.SetLeftActive(true);
+                //resolver.OperandManager.Left.SetByStr(resolver.GetResult().ToString());
+                //resolver.OperandManager.SetLeftActive(true);
             }
         }
 
@@ -125,15 +127,15 @@ namespace Lab4
             // обрабатываем нажатие на клавишу с цифрой
 
             string number = ((Button)sender).Text;
-            Operand activeOperand = OpHandler.OperandManager.Active();
+            Operand activeOperand = resolver.LastOperand;
 
             if (activeOperand.GetFunction() != null)
             {
                 // если текущий операнд является функцией, то при вводе числа
                 // зануляем этот операнд и записываем на его место вводимое число
-                
-                activeOperand.SetDefault();
-                SetExpression(OpHandler.GetExpressionStr());
+
+                resolver.SetOperandToDefault();
+                SetExpression(resolver.GetExpression());
             }
 
             if (activeOperand.WaitForInput() && activeOperand.GetText() != "0")
@@ -143,8 +145,8 @@ namespace Lab4
                 // функции sqrt(1). Тогда если после этого мы нажмем на какую-либо цифру, то этот результат
                 // должен стереться и вместо него мы вставим вводимое число
 
-                activeOperand.SetByStr("0");
-                SetNumber("0");
+                resolver.SetOperandToDefault();
+                SetNumber(activeOperand.GetText());
             }
 
             if (CurrentNumberLabel.Text.Length + 1 >= MaxInputLength)
@@ -152,7 +154,7 @@ namespace Lab4
                 return;
             }
 
-            OpHandler.PutNum(number);
+            resolver.PutNum(number);
 
             SetNumber(activeOperand.GetNumber().ToString());
             DecreaseFontSize();
@@ -163,40 +165,46 @@ namespace Lab4
             // нажата кнопка +,-,*,/
             Button b = (Button)sender;
             string operation = b.Name;
+            Decimal lastValue = resolver.LastOperand.GetNumber();
 
-            if (OpHandler.OperandManager.RightIsActive() && 
-                !OpHandler.OperandManager.Active().WaitForInput())
-            {
-                // если в данный момент уже введено какое-то выражение и вновь производится клик
-                // по оператору, то решаем это выражение
-                Console.WriteLine("double op clicked, waitforinput: {0}", OpHandler.OperandManager.Active().WaitForInput());
-                Solve();
-            }
+            //if (!resolver.LastOperand.WaitForInput())
+            //{
+            //    // если в данный момент уже введено какое-то выражение и вновь производится клик
+            //    // по оператору, то решаем это выражение
+            //    Console.WriteLine("double op clicked, waitforinput: {0}", resolver.LastOperand.WaitForInput());
+            //    Solve();
+            //}
 
             switch (operation)
             {
                 case "PlusButton":
-                    OpHandler.PutOperator(OpHandler.Sum);
+                    resolver.PutOperator("+");
                     break;
                 case "MinusButton":
-                    OpHandler.PutOperator(OpHandler.Dif);
+                    resolver.PutOperator("-");
                     break;
                 case "MuliplyButton":
-                    OpHandler.PutOperator(OpHandler.Mult);
+                    resolver.PutOperator("*");
                     break;
                 case "DivisionButton":
-                    OpHandler.PutOperator(OpHandler.Div);
+                    resolver.PutOperator("/");
+                    break;
+                case "PercentButton":
+                    resolver.PutOperator("%");
                     break;
             }
-            SetExpression(OpHandler.GetExpressionStr());
+
+            SetExpression(resolver.GetExpression());
+            resolver.LastOperand.SetByNum(lastValue);
+            SetNumber(resolver.LastOperand.GetNumber().ToString());
             
-            if (OpHandler.OperandManager.RightIsActive())
-            {
-                // устанавливаем в качестве правого оператора то же число, что и для левого оператора,
-                // чтоб в случае, если пользователь сразу нажмет '=', посчитать результат для одного и того же числа
-                // как в оригнинальном калькуляторе
-                OpHandler.OperandManager.Right.SetByNum(OpHandler.OperandManager.Left.GetNumber()); 
-            }
+            //if (resolver.OperandManager.RightIsActive())
+            //{
+            //    // устанавливаем в качестве правого оператора то же число, что и для левого оператора,
+            //    // чтоб в случае, если пользователь сразу нажмет '=', посчитать результат для одного и того же числа
+            //    // как в оригнинальном калькуляторе
+            //    resolver.OperandManager.Right.SetByNum(resolver.OperandManager.Left.GetNumber()); 
+            //}
         }
 
         private void SingleOperatorClicked(object sender, EventArgs e)
@@ -209,20 +217,19 @@ namespace Lab4
 
             switch (operation)
             {
-                case "SquareButton": OpHandler.PutFunction(OpHandler.FunctionManager.Sqr);break;
-                case "RadicalButton": OpHandler.PutFunction(OpHandler.FunctionManager.Sqrt); break;
-                case "CosButton": OpHandler.PutFunction(OpHandler.FunctionManager.Cos); break;
-                case "SinButton":OpHandler.PutFunction(OpHandler.FunctionManager.Sin);break;
-                case "TgButton":OpHandler.PutFunction(OpHandler.FunctionManager.Tg);break;
-                case "CtgButton":OpHandler.PutFunction(OpHandler.FunctionManager.Ctg);break;
-                case "LnButton":OpHandler.PutFunction(OpHandler.FunctionManager.Ln);break;
-                case "LgButton":OpHandler.PutFunction(OpHandler.FunctionManager.Lg);break;
-                case "ReverseButton":OpHandler.PutFunction(OpHandler.FunctionManager.Rev);break;
-                case "PercentButton":OpHandler.PutFunction(OpHandler.FunctionManager.Perc);break;
+                case "SquareButton": resolver.PutFunction(resolver.FunctionManager.Sqr);break;
+                case "RadicalButton": resolver.PutFunction(resolver.FunctionManager.Sqrt); break;
+                case "CosButton": resolver.PutFunction(resolver.FunctionManager.Cos); break;
+                case "SinButton":resolver.PutFunction(resolver.FunctionManager.Sin);break;
+                case "TgButton":resolver.PutFunction(resolver.FunctionManager.Tg);break;
+                case "CtgButton":resolver.PutFunction(resolver.FunctionManager.Ctg);break;
+                case "LnButton":resolver.PutFunction(resolver.FunctionManager.Ln);break;
+                case "LgButton":resolver.PutFunction(resolver.FunctionManager.Lg);break;
+                case "ReverseButton":resolver.PutFunction(resolver.FunctionManager.Rev);break;
             }
 
-            SetNumber(OpHandler.OperandManager.Active().GetNumber().ToString());
-            SetExpression(OpHandler.GetExpressionStr());
+            SetNumber(resolver.LastOperand.GetNumber().ToString());
+            SetExpression(resolver.GetExpression() + resolver.LastOperand.GetText());
             SetInputSettings(DefaultInputLength, IncreaseFontSize);
         }
 
@@ -233,29 +240,29 @@ namespace Lab4
              */
 
             string operation = ((Button)sender).Name;
-            string currentValue = OpHandler.OperandManager.Active().GetText();
+            string currentValue = resolver.LastOperand.GetText();
 
             switch (operation)
             {
                 case "PosOrNegButton":
-                    if (OpHandler.PutNegative())
+                    if (resolver.PutNegative())
                         UpdateInputSettings(1, DecreaseFontSize);
                     else
                         UpdateInputSettings(-1, DecreaseFontSize);
-                    if (OpHandler.OperandManager.Active().GetFunction() != null)
-                        SetExpression(OpHandler.GetExpressionStr());
+                    if (resolver.LastOperand.GetFunction() != null)
+                        SetExpression(resolver.GetExpression());
                     break;
                 case "CommaButton":
-                    OpHandler.PutComma();
+                    resolver.PutComma();
                     UpdateInputSettings(1, DecreaseFontSize);
                     break;
                 case "DeleteButton":
-                    Operand activeOperand = OpHandler.OperandManager.Active();
+                    Operand activeOperand = resolver.LastOperand;
 
                     if (activeOperand.GetText() == "0" || activeOperand.GetFunction() != null)
                         return;
 
-                    if (activeOperand.GetText().Length == 1 || 
+                    if (activeOperand.GetText().Length == 1 ||
                         CurrentNumberLabel.Text.Length == 2 && CurrentNumberLabel.Text.First() == '-')
                     {
                         activeOperand.SetByStr("0");
@@ -277,26 +284,23 @@ namespace Lab4
                     IncreaseFontSize();
                     break;
                 case "CancelEntryButton":
-                    OpHandler.OperandManager.Active().SetDefault();
-                    SetNumber(OpHandler.OperandManager.Active().GetNumber().ToString());
-                    SetExpression(OpHandler.GetExpressionStr());
+                    resolver.LastOperand.SetDefault();
+                    SetNumber(resolver.LastOperand.GetNumber().ToString());
+                    SetExpression(resolver.GetExpression());
                     SetInputSettings(DefaultInputLength, IncreaseFontSize);
                     break;
                 case "ClearButton":
                     Clear();
                     break;
             }
-            SetNumber(OpHandler.OperandManager.Active().GetText());
+            SetNumber(resolver.LastOperand.GetText());
         }
 
         public void Clear()
         {
-            OpHandler.OperandManager.Right.SetDefault();
-            OpHandler.OperandManager.Left.SetDefault();
-            OpHandler.OperandManager.SetLeftActive();
-            OpHandler.SetExpression(null);
-            SetNumber(OpHandler.OperandManager.Active().GetNumber().ToString());
-            SetExpression(OpHandler.GetExpressionStr());
+            resolver.SetToDefault();
+            SetNumber(resolver.LastOperand.GetNumber().ToString());
+            SetExpression(resolver.GetExpression());
         }
 
         private void HistoryButtonClicked(object sender, EventArgs e)
@@ -306,7 +310,7 @@ namespace Lab4
             if (historyWindow != null && historyWindow.Visible)
                 return;
 
-            historyWindow = new HistoryWindow(this, OpHandler);
+            historyWindow = new HistoryWindow(this, resolver);
             historyWindow.Show();
         }
 
@@ -317,18 +321,21 @@ namespace Lab4
 
         private void AdditionalDisplay(bool hide)
         {
+            int W = additionalLayout.Width;
+            //PercentButton.Enabled = hide;
+
             if (hide)
             {
-                HistoryButton.Location = new System.Drawing.Point(225, 12);
-                mainLayout.Location = new System.Drawing.Point(12, 41);
-                ClientSize = new System.Drawing.Size(271, 388);
+                HistoryButton.Location = new System.Drawing.Point(HistoryButton.Location.X - W, 12);
+                mainLayout.Location = new System.Drawing.Point(mainLayout.Location.X - W, 41);
+                ClientSize = new System.Drawing.Size(ClientSize.Width - W, 388);
                 additionalLayout.Hide();
             }
             else
             {
-                HistoryButton.Location = new System.Drawing.Point(288, 12);
-                mainLayout.Location = new System.Drawing.Point(75, 41);
-                ClientSize = new System.Drawing.Size(334, 388);
+                HistoryButton.Location = new System.Drawing.Point(HistoryButton.Location.X + W, 12);
+                mainLayout.Location = new System.Drawing.Point(mainLayout.Location.X + W, 41);
+                ClientSize = new System.Drawing.Size(ClientSize.Width + W, 388);
                 additionalLayout.Show();
             }
         }

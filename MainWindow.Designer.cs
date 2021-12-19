@@ -65,6 +65,9 @@ namespace Lab4
             this.CtgButton = new System.Windows.Forms.Button();
             this.LnButton = new System.Windows.Forms.Button();
             this.LgButton = new System.Windows.Forms.Button();
+            this.OpenBracketButton = new System.Windows.Forms.Button();
+            this.CloseBracketButton = new System.Windows.Forms.Button();
+            this.ExpButton = new System.Windows.Forms.Button();
             this.mainLayout.SuspendLayout();
             this.additionalLayout.SuspendLayout();
             this.SuspendLayout();
@@ -97,7 +100,7 @@ namespace Lab4
             this.mainLayout.Controls.Add(this.ZeroButton);
             this.mainLayout.Controls.Add(this.CommaButton);
             this.mainLayout.Controls.Add(this.SolveButton);
-            this.mainLayout.Location = new System.Drawing.Point(75, 41);
+            this.mainLayout.Location = new System.Drawing.Point(135, 41);
             this.mainLayout.Name = "mainLayout";
             this.mainLayout.Size = new System.Drawing.Size(259, 335);
             this.mainLayout.TabIndex = 0;
@@ -144,7 +147,7 @@ namespace Lab4
             this.PercentButton.TabIndex = 0;
             this.PercentButton.Text = "%";
             this.PercentButton.UseVisualStyleBackColor = false;
-            this.PercentButton.Click += new System.EventHandler(this.SingleOperatorClicked);
+            this.PercentButton.Click += new System.EventHandler(this.DoubleOperatorClicked);
             // 
             // CancelEntryButton
             // 
@@ -179,16 +182,16 @@ namespace Lab4
             // DeleteButton
             // 
             this.DeleteButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(228)))), ((int)(((byte)(228)))));
-            this.DeleteButton.BackgroundImage = global::Lab4.Properties.Resources.delete_256x185;
             this.DeleteButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.DeleteButton.FlatAppearance.BorderSize = 0;
             this.DeleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.DeleteButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.DeleteButton.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.DeleteButton.Location = new System.Drawing.Point(186, 84);
             this.DeleteButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.DeleteButton.Name = "DeleteButton";
             this.DeleteButton.Size = new System.Drawing.Size(60, 40);
             this.DeleteButton.TabIndex = 3;
+            this.DeleteButton.Text = "⌫";
             this.DeleteButton.UseVisualStyleBackColor = false;
             this.DeleteButton.Click += new System.EventHandler(this.EditingButtonClicked);
             // 
@@ -511,7 +514,7 @@ namespace Lab4
             this.HistoryButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.HistoryButton.FlatAppearance.BorderSize = 0;
             this.HistoryButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.HistoryButton.Location = new System.Drawing.Point(288, 12);
+            this.HistoryButton.Location = new System.Drawing.Point(348, 12);
             this.HistoryButton.Name = "HistoryButton";
             this.HistoryButton.Size = new System.Drawing.Size(32, 23);
             this.HistoryButton.TabIndex = 2;
@@ -526,10 +529,13 @@ namespace Lab4
             this.additionalLayout.Controls.Add(this.CtgButton);
             this.additionalLayout.Controls.Add(this.LnButton);
             this.additionalLayout.Controls.Add(this.LgButton);
+            this.additionalLayout.Controls.Add(this.OpenBracketButton);
+            this.additionalLayout.Controls.Add(this.CloseBracketButton);
+            this.additionalLayout.Controls.Add(this.ExpButton);
             this.additionalLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.additionalLayout.Location = new System.Drawing.Point(14, 124);
+            this.additionalLayout.Location = new System.Drawing.Point(12, 124);
             this.additionalLayout.Name = "additionalLayout";
-            this.additionalLayout.Size = new System.Drawing.Size(63, 252);
+            this.additionalLayout.Size = new System.Drawing.Size(125, 252);
             this.additionalLayout.TabIndex = 3;
             // 
             // CosButton
@@ -622,12 +628,54 @@ namespace Lab4
             this.LgButton.UseVisualStyleBackColor = false;
             this.LgButton.Click += new System.EventHandler(this.SingleOperatorClicked);
             // 
+            // OpenBracketButton
+            // 
+            this.OpenBracketButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(228)))), ((int)(((byte)(228)))));
+            this.OpenBracketButton.FlatAppearance.BorderSize = 0;
+            this.OpenBracketButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.OpenBracketButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.OpenBracketButton.Location = new System.Drawing.Point(62, 0);
+            this.OpenBracketButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
+            this.OpenBracketButton.Name = "OpenBracketButton";
+            this.OpenBracketButton.Size = new System.Drawing.Size(60, 40);
+            this.OpenBracketButton.TabIndex = 7;
+            this.OpenBracketButton.Text = "(";
+            this.OpenBracketButton.UseVisualStyleBackColor = false;
+            // 
+            // CloseBracketButton
+            // 
+            this.CloseBracketButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(228)))), ((int)(((byte)(228)))));
+            this.CloseBracketButton.FlatAppearance.BorderSize = 0;
+            this.CloseBracketButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CloseBracketButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.CloseBracketButton.Location = new System.Drawing.Point(62, 42);
+            this.CloseBracketButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
+            this.CloseBracketButton.Name = "CloseBracketButton";
+            this.CloseBracketButton.Size = new System.Drawing.Size(60, 40);
+            this.CloseBracketButton.TabIndex = 8;
+            this.CloseBracketButton.Text = ")";
+            this.CloseBracketButton.UseVisualStyleBackColor = false;
+            // 
+            // ExpButton
+            // 
+            this.ExpButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(228)))), ((int)(((byte)(228)))));
+            this.ExpButton.FlatAppearance.BorderSize = 0;
+            this.ExpButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ExpButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ExpButton.Location = new System.Drawing.Point(62, 84);
+            this.ExpButton.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
+            this.ExpButton.Name = "ExpButton";
+            this.ExpButton.Size = new System.Drawing.Size(60, 40);
+            this.ExpButton.TabIndex = 9;
+            this.ExpButton.Text = "exp";
+            this.ExpButton.UseVisualStyleBackColor = false;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.ClientSize = new System.Drawing.Size(334, 388);
+            this.ClientSize = new System.Drawing.Size(394, 388);
             this.Controls.Add(this.additionalLayout);
             this.Controls.Add(this.HistoryButton);
             this.Controls.Add(this.AdditionalButton);
@@ -680,6 +728,9 @@ namespace Lab4
         private System.Windows.Forms.Button CtgButton;
         private System.Windows.Forms.Button LnButton;
         private System.Windows.Forms.Button LgButton;
+        private System.Windows.Forms.Button OpenBracketButton;
+        private System.Windows.Forms.Button CloseBracketButton;
+        private System.Windows.Forms.Button ExpButton;
     }
 }
 

@@ -28,11 +28,11 @@ namespace Lab4
         private Stack<Alphabet> AlphabetStack = new Stack<Alphabet>(); // стек букв
         private Stack<string> FunctionStack = new Stack<string>(); // стек функций
 
-        private Resolver OpHandler;
+        private Resolver resolver;
 
         public Parser(Resolver parent)
         {
-            OpHandler = parent;
+            resolver = parent;
 
             FillFunctionNames();
             FillOperatorNames();
@@ -55,18 +55,18 @@ namespace Lab4
                 if (number == '-')
                     negative = true;
                 else if (number == ',')
-                    OpHandler.PutComma();
+                    resolver.PutComma();
                 else
-                    OpHandler.PutNum(number.ToString());
+                    resolver.PutNum(number.ToString());
             }
 
-            if (negative) OpHandler.PutNegative();
+            if (negative) resolver.PutNegative();
             
             while (FunctionStack.Count() != 0) {
                 fname = FunctionStack.Pop();
 
                 if (FMap.TryGetValue(fname, out tempf))
-                    OpHandler.PutFunction(tempf);
+                    resolver.PutFunction(tempf);
                 else
                     return false;
             }
@@ -220,7 +220,7 @@ namespace Lab4
 
                         ReplaceOnStack(AlphabetStack, Alphabet.S);
                         bool success = EvalOperand();
-                        OpHandler.PutOperator(OpMap.GetValueOrDefault(symbol));
+                        resolver.PutOperator(OpMap.GetValueOrDefault(symbol));
                         ClearBuffer();
                         Current = State.Start;
                         return success;
@@ -242,7 +242,7 @@ namespace Lab4
                     {
                         ReplaceOnStack(AlphabetStack, Alphabet.S);
                         bool success = EvalOperand();
-                        OpHandler.PutOperator(OpMap.GetValueOrDefault(symbol));
+                        resolver.PutOperator(OpMap.GetValueOrDefault(symbol));
                         ClearBuffer();
                         Current = State.Start;
                         return success;
@@ -259,7 +259,7 @@ namespace Lab4
                     {
                         ReplaceOnStack(AlphabetStack, Alphabet.S);
                         bool success = EvalOperand();
-                        OpHandler.PutOperator(OpMap.GetValueOrDefault(symbol));
+                        resolver.PutOperator(OpMap.GetValueOrDefault(symbol));
                         ClearBuffer();
                         Current = State.Start;
                         return success;
@@ -311,7 +311,7 @@ namespace Lab4
 
         public void FillFunctionNames()
         {
-            foreach (KeyValuePair<Func<Decimal, Decimal>, string> entry in OpHandler.FunctionManager.GetFunctionMap())
+            foreach (KeyValuePair<Func<Decimal, Decimal>, string> entry in resolver.FunctionManager.GetFunctionMap())
             {
                 FMap.Add(entry.Value.Split("(")[0], entry.Key);
             }
@@ -319,7 +319,7 @@ namespace Lab4
 
         public void FillOperatorNames()
         {
-            foreach (KeyValuePair<Action, string> entry in OpHandler.GetExpressions())
+            foreach (KeyValuePair<Action, string> entry in resolver.GetExpressions())
             {
                 OpMap.Add(entry.Value[0], entry.Key);
             }

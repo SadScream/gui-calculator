@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Collections.Generic;
 
 namespace Lab4
 {
@@ -26,8 +27,7 @@ namespace Lab4
              * возвращает значения всех свойств к изначальным
              */
 
-            Format = "{0}";
-            Function = null;
+            DeleteFunctions();
             Text = "0";
             Number = 0;
             waitForInputStart = true;
@@ -60,6 +60,23 @@ namespace Lab4
         }
 
         public void AddFunction(FunctionHandler FManager, Func<Decimal, Decimal> f)
+        {
+            /*
+             * обертывает операнд в указанную функцию
+             */
+
+            waitForInputStart = false;
+
+            if (Function != null)
+            {
+                Number = Function(Number);
+            }
+
+            Function = f;
+            AddFormat(FManager.GetFormat(f));
+        }
+
+        public void AddFunction(UFunctionHandler FManager, Func<Decimal, Decimal> f)
         {
             /*
              * обертывает операнд в указанную функцию
