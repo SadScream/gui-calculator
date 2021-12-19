@@ -641,6 +641,7 @@ namespace Lab4
             this.OpenBracketButton.TabIndex = 7;
             this.OpenBracketButton.Text = "(";
             this.OpenBracketButton.UseVisualStyleBackColor = false;
+            this.OpenBracketButton.Click += new System.EventHandler(this.EditingButtonClicked);
             // 
             // CloseBracketButton
             // 
@@ -655,6 +656,7 @@ namespace Lab4
             this.CloseBracketButton.TabIndex = 8;
             this.CloseBracketButton.Text = ")";
             this.CloseBracketButton.UseVisualStyleBackColor = false;
+            this.CloseBracketButton.Click += new System.EventHandler(this.EditingButtonClicked);
             // 
             // ExpButton
             // 

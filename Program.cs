@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
@@ -19,9 +20,10 @@ namespace Lab4
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Console.WriteLine();
-            //Application.Run(new MainWindow());
-            UParser parser = new UParser(new ExpressionHandler());
-            Console.WriteLine(parser.Evaluate("10 + 120 * 10%"));
+            Application.Run(new MainWindow());
+            //UParser parser = new UParser(new ExpressionHandler());
+            //KeyValuePair<Decimal, string> result = parser.Evaluate("sqrt(36) + 17% - 23 * sqrt(25)% + 6");
+            //Console.WriteLine("{0}; {1}", result.Key, result.Value);
         }
     }
 }

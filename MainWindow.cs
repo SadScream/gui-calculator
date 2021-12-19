@@ -25,6 +25,7 @@ namespace Lab4
             AdditionalDisplay(true);
             resolver = new ExpressionHandler();
             MaxInputLength = DefaultInputLength;
+            SetExpression(resolver.GetExpression());
         }
 
         public void SetExpression(string s)
@@ -175,24 +176,26 @@ namespace Lab4
             //    Solve();
             //}
 
-            switch (operation)
-            {
-                case "PlusButton":
-                    resolver.PutOperator("+");
-                    break;
-                case "MinusButton":
-                    resolver.PutOperator("-");
-                    break;
-                case "MuliplyButton":
-                    resolver.PutOperator("*");
-                    break;
-                case "DivisionButton":
-                    resolver.PutOperator("/");
-                    break;
-                case "PercentButton":
-                    resolver.PutOperator("%");
-                    break;
-            }
+            resolver.PutOperator(b.Text);
+
+            //switch (operation)
+            //{
+            //    case "PlusButton":
+            //        resolver.PutOperator("+");
+            //        break;
+            //    case "MinusButton":
+            //        resolver.PutOperator("-");
+            //        break;
+            //    case "MuliplyButton":
+            //        resolver.PutOperator("*");
+            //        break;
+            //    case "DivisionButton":
+            //        resolver.PutOperator("/");
+            //        break;
+            //    case "PercentButton":
+            //        resolver.PutOperator("%");
+            //        break;
+            //}
 
             SetExpression(resolver.GetExpression());
             resolver.LastOperand.SetByNum(lastValue);
@@ -244,6 +247,14 @@ namespace Lab4
 
             switch (operation)
             {
+                case "OpenBracketButton":
+                    resolver.PutBracket("(");
+                    SetExpression(resolver.GetExpression());
+                    break;
+                case "CloseBracketButton":
+                    resolver.PutBracket(")");
+                    SetExpression(resolver.GetExpression());
+                    break;
                 case "PosOrNegButton":
                     if (resolver.PutNegative())
                         UpdateInputSettings(1, DecreaseFontSize);
@@ -259,7 +270,7 @@ namespace Lab4
                 case "DeleteButton":
                     Operand activeOperand = resolver.LastOperand;
 
-                    if (activeOperand.GetText() == "0" || activeOperand.GetFunction() != null)
+                    if (activeOperand.WaitForInput() || activeOperand.GetText() == "0" || activeOperand.GetFunction() != null)
                         return;
 
                     if (activeOperand.GetText().Length == 1 ||

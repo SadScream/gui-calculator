@@ -14,6 +14,7 @@ namespace Lab4
         private Decimal Result; // результат применения операции
         private string Error = ""; // последняя ошибка
         private string[] Operands = { "+", "-", "/", "*", "%" };
+        private Stack<string> BracketStack = new Stack<string>(); // стэк скобок
 
         // функция, которая будет вызываться всякий раз после выполнения какой-либо
         // математической операции, т.е. сложение/деление/взятие косинуса/возведение в квадрат и т.д.
@@ -74,6 +75,38 @@ namespace Lab4
             }
         }
 
+        public void PutBracket(string br)
+        {
+            string lastOp = "";
+
+            if (br == "(")
+            {
+                if (Expression.Length >= 2)
+                    lastOp = Expression[Expression.Length - 2].ToString();
+
+                if (lastOp == "%" && !Operands.Contains(lastOp))
+                {
+                    return;
+                }
+
+                BracketStack.Push("(");
+                Expression += br;
+            } else if (br == ")" && BracketStack.Count > 0)
+            {
+                if (Expression.Length >= 3)
+                    lastOp = Expression[Expression.Length - 3].ToString();
+
+                if (!Operands.Contains(lastOp))
+                {
+                    //if (!LastOperand.WaitForInput())
+                        Expression += LastOperand.GetText();
+                    Expression += br;
+                    BracketStack.Pop();
+                    SetOperandToDefault();
+                }
+            }
+        }
+
         public bool PutNegative()
         {
             /*
@@ -113,30 +146,31 @@ namespace Lab4
 
             if (op == "%")
             {
-                if (Expression.Length >= 2)
-                {
-                    string lastOp = Expression[Expression.Length - 2].ToString();
+                space = "";
+                //if (Expression.Length >= 2)
+                //{
+                //    string lastOp = Expression[Expression.Length - 2].ToString();
 
-                    if (lastOp != "%" && Operands.Contains(lastOp))
-                    {
-                        expr = expr.Remove(Expression.Length-3);
-                    }
-                }
+                //    if (lastOp != "%" && Operands.Contains(lastOp))
+                //    {
+                //        expr = expr.Remove(Expression.Length-3);
+                //    }
+                //}
 
-                KeyValuePair<Decimal, string> result = parser.Evaluate(expr);
+                //KeyValuePair<Decimal, string> result = parser.Evaluate(expr);
 
-                if (result.Value.Length == 0)
-                {
-                    LastOperand.SetByNum(result.Key / 100 * LastOperand.GetNumber());
-                    space = "";
-                } else
-                {
-                    Error = result.Value;
-                    return false;
-                }
+                //if (result.Value.Length == 0)
+                //{
+                //    LastOperand.SetByNum(result.Key / 100 * LastOperand.GetNumber());
+                //    space = "";
+                //} else
+                //{
+                //    Error = result.Value;
+                //    return false;
+                //}
             }
 
-            //if (!LastOperand.WaitForInput())
+            if (!LastOperand.WaitForInput())
                 Expression = Expression + LastOperand.GetText();
 
             Expression += space + op + space;
@@ -166,8 +200,9 @@ namespace Lab4
             /*
              * Вычисляет выражение, если оно введено полностью
              */
-            
-            Expression = Expression + LastOperand.GetText();
+
+            if (!LastOperand.WaitForInput())
+                Expression = Expression + LastOperand.GetText();
             Console.WriteLine("going to solve: {0}", Expression);
 
             KeyValuePair<Decimal, string> result = parser.Evaluate(Expression); // result & error
